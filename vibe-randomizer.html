@@ -1,0 +1,2282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>What's the Vibe?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F0EBFF;--bg2:#E8E0FF;--cream:#FFFAFF;
+  --purple:#7C4DFF;--purple-l:#B39DFF;--purple-p:#EDE7FF;
+  --pink:#FF4D8D;--pink-l:#FF8DB8;--pink-p:#FFE0EE;
+  --yellow:#FFD600;--yellow-l:#FFE766;--yellow-p:#FFFDE0;
+  --mint:#00C9A7;--mint-p:#E0FFF9;
+  --coral:#FF6B6B;--coral-p:#FFE8E8;
+  --blue:#4DA6FF;--blue-p:#E0F2FF;
+  --orange:#FF8C42;--orange-p:#FFF0E8;
+  --text:#2D1B69;--text2:#6B5B95;--text3:#9B8CC4;
+  --border:#D4C5F5;--border2:#B8A4F0;
+  --shadow:rgba(124,77,255,0.12);
+  --fd:'Fredoka One',cursive;--fn:'Nunito',sans-serif;
+}
+html{min-height:100vh;}
+body{font-family:var(--fn);color:var(--text);min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:24px 14px 120px;position:relative;overflow-x:hidden;background:#F0EBFF;}
+
+/* ══ AURORA ══ */
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.aurora::before{content:'';position:absolute;inset:-50%;
+  background:conic-gradient(from 0deg at 40% 50%,#C9B8FF 0%,#FFB8D4 15%,#B8F0E8 30%,#FFE8A0 45%,#C9B8FF 60%,#FFB8D4 75%,#B8F0E8 90%,#C9B8FF 100%);
+  opacity:.35;filter:blur(60px);animation:auroraRotate 20s linear infinite;}
+@keyframes auroraRotate{to{transform:rotate(360deg);}}
+.aurora::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 30% 40%,rgba(200,180,255,.4) 0%,transparent 70%),
+             radial-gradient(ellipse 60% 80% at 70% 60%,rgba(255,180,210,.35) 0%,transparent 70%);
+  animation:auroraShift 12s ease-in-out infinite alternate;}
+@keyframes auroraShift{0%{opacity:.6;transform:scale(1);}100%{opacity:1;transform:scale(1.08);}}
+
+/* ══ SHOOTING STARS ══ */
+.stars-layer{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+.star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:0;}
+.shooting-star{position:absolute;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.9),rgba(200,180,255,.6));
+  opacity:0;transform-origin:left center;}
+.shooting-star.go{animation:shootStar var(--dur,1.2s) ease-out var(--delay,0s) forwards;}
+@keyframes shootStar{
+  0%{opacity:0;transform:translateX(0) scaleX(0);}
+  5%{opacity:1;transform:translateX(0) scaleX(1);}
+  100%{opacity:0;transform:translateX(var(--tx,400px)) scaleX(1);}
+}
+
+body::before{content:'';position:fixed;inset:0;
+  background-image:radial-gradient(circle,rgba(124,77,255,0.07) 1.5px,transparent 1.5px);
+  background-size:24px 24px;pointer-events:none;z-index:1;}
+#cv{position:fixed;inset:0;pointer-events:none;z-index:999;}
+.food-layer{position:fixed;inset:0;pointer-events:none;z-index:2;overflow:hidden;}
+.fc{position:absolute;animation:foodFloat ease-in-out infinite;}
+@keyframes foodFloat{
+  0%,100%{transform:translateY(0) rotate(var(--r0)) scale(1);}
+  33%{transform:translateY(-18px) rotate(var(--r1)) scale(1.06);}
+  66%{transform:translateY(8px) rotate(var(--r2)) scale(.96);}
+}
+
+/* ══ CHEF ══ */
+.chef-fixed{position:fixed;bottom:18px;right:18px;z-index:400;width:68px;height:68px;cursor:pointer;}
+.chef-fixed svg{width:68px;height:68px;filter:drop-shadow(0 4px 12px rgba(124,77,255,0.25));}
+.chef-fixed.bounce{animation:chefBounce .5s cubic-bezier(.16,1,.3,1);}
+.chef-fixed.wiggle{animation:chefWiggle .4s ease;}
+.chef-fixed.celebrate{animation:chefCelebrate .6s cubic-bezier(.16,1,.3,1);}
+@keyframes chefBounce{0%,100%{transform:translateY(0);}40%{transform:translateY(-22px) scale(1.12);}70%{transform:translateY(-8px);}}
+@keyframes chefWiggle{0%,100%{transform:rotate(0);}25%{transform:rotate(-14deg);}75%{transform:rotate(14deg);}}
+@keyframes chefCelebrate{0%{transform:scale(1);}20%{transform:scale(1.35) rotate(-5deg);}50%{transform:scale(1.22) rotate(6deg);}80%{transform:scale(1.1) rotate(-2deg);}100%{transform:scale(1);}}
+
+/* ══ FAB ══ */
+.fd-fab{position:fixed;bottom:100px;left:18px;z-index:500;display:flex;flex-direction:column;align-items:flex-start;gap:6px;}
+.fd-fab-btn{background:linear-gradient(135deg,var(--pink),var(--coral));color:#fff;border:none;
+  border-radius:50px;padding:12px 20px;font-family:var(--fn);font-size:13px;font-weight:800;
+  cursor:pointer;box-shadow:0 6px 22px rgba(255,77,141,.45);
+  transition:all .2s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;gap:7px;
+  animation:fabPulse 3s ease-in-out infinite;}
+@keyframes fabPulse{0%,100%{box-shadow:0 6px 22px rgba(255,77,141,.45);}50%{box-shadow:0 6px 30px rgba(255,77,141,.7);}}
+.fd-fab-btn:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 10px 28px rgba(255,77,141,.6);animation:none;}
+.fd-fab-hint{font-size:10px;font-weight:800;color:var(--text3);background:var(--cream);
+  border:1.5px solid var(--border);border-radius:8px;padding:4px 9px;
+  animation:hintFloat 2s ease-in-out infinite alternate;pointer-events:none;white-space:nowrap;}
+@keyframes hintFloat{0%{transform:translateY(0);}100%{transform:translateY(-4px);}}
+
+/* ══ FD OVERLAY ══ */
+.fd-overlay{position:fixed;inset:0;z-index:800;background:rgba(45,27,105,.55);
+  backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;
+  padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.fd-overlay.open{opacity:1;pointer-events:all;}
+.fd-modal{background:var(--cream);border:2px solid var(--border);border-radius:28px;
+  padding:26px 22px;width:100%;max-width:420px;
+  box-shadow:0 24px 60px rgba(124,77,255,.22);
+  transform:scale(.88) translateY(24px);transition:transform .38s cubic-bezier(.16,1,.3,1);position:relative;}
+.fd-overlay.open .fd-modal{transform:scale(1) translateY(0);}
+.fd-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);}
+.fd-title{font-family:var(--fd);font-size:26px;color:var(--text);margin-bottom:2px;}
+.fd-title span{color:var(--pink);}
+.fd-sub{font-size:11px;color:var(--text3);margin-bottom:12px;font-weight:600;}
+.fd-input-row{display:flex;gap:7px;margin-bottom:10px;}
+.fd-inp{flex:1;padding:10px 13px;border-radius:14px;border:2px solid var(--border);
+  background:var(--bg);font-family:var(--fn);font-size:13px;font-weight:700;color:var(--text);outline:none;transition:border-color .2s;}
+.fd-inp:focus{border-color:var(--pink);}
+.fd-add{padding:10px 14px;border-radius:14px;border:2px solid var(--pink);
+  background:var(--pink-p);color:var(--pink);font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;transition:all .15s;}
+.fd-add:hover{background:var(--pink);color:#fff;}
+.fd-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;min-height:30px;}
+.fd-chip{display:flex;align-items:center;gap:5px;padding:6px 10px 6px 13px;border-radius:50px;
+  background:var(--pink-p);border:2px solid rgba(255,77,141,.25);
+  font-size:12px;font-weight:800;color:var(--pink);}
+.fd-chip button{background:none;border:none;cursor:pointer;font-size:11px;color:var(--pink-l);padding:0;}
+.fd-slot-wrap{display:none;border-radius:16px;overflow:hidden;border:3px solid var(--purple-l);
+  background:var(--text);height:130px;position:relative;margin-bottom:12px;}
+.fd-slot-wrap.show{display:block;}
+.fd-slot-shadow-t{position:absolute;top:0;left:0;right:0;height:36px;background:linear-gradient(to bottom,var(--text),transparent);z-index:2;}
+.fd-slot-shadow-b{position:absolute;bottom:0;left:0;right:0;height:36px;background:linear-gradient(to top,var(--text),transparent);z-index:2;}
+.fd-slot-line{position:absolute;top:50%;left:12px;right:12px;transform:translateY(-50%);height:52px;
+  border:2px solid rgba(255,214,0,.5);border-radius:10px;background:rgba(255,214,0,.06);z-index:3;}
+.fd-slot-reel{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;}
+.fd-slot-item{height:65px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:20px;color:#FFF9C4;text-align:center;padding:0 16px;}
+.coin-arena{display:none;height:130px;align-items:center;justify-content:center;margin-bottom:12px;perspective:700px;}
+.coin-arena.show{display:flex;}
+.coin{width:86px;height:86px;border-radius:50%;position:relative;transform-style:preserve-3d;margin:0 auto;}
+.coin-face{position:absolute;inset:0;border-radius:50%;backface-visibility:hidden;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;font-family:var(--fn);
+  border:4px solid rgba(255,255,255,.3);box-shadow:inset 0 0 20px rgba(0,0,0,.2),0 8px 24px rgba(0,0,0,.2);}
+.coin-h{background:linear-gradient(135deg,#FFD700,#FFA500);color:#7B3F00;}
+.coin-t{background:linear-gradient(135deg,#C0C0C0,#808080);color:#303030;transform:rotateY(180deg);}
+.coin-lbl{text-align:center;font-size:12px;color:var(--text3);font-weight:700;margin-top:6px;}
+.fd-actions{display:flex;gap:8px;margin-bottom:12px;}
+.fd-go{flex:1;padding:13px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;
+  font-family:var(--fd);font-size:18px;cursor:pointer;box-shadow:0 4px 16px rgba(124,77,255,.35);transition:all .2s;}
+.fd-go:hover{transform:translateY(-2px);}
+.fd-go:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+.fd-coin{padding:13px 14px;border-radius:14px;border:2px solid var(--border2);
+  background:var(--purple-p);color:var(--purple);font-family:var(--fn);font-size:13px;font-weight:800;
+  cursor:pointer;transition:all .2s;display:none;white-space:nowrap;}
+.fd-coin:hover{border-color:var(--purple);background:var(--purple);color:#fff;}
+.fd-coin.active{background:var(--pink);border-color:var(--pink);color:#fff;}
+.fd-result{text-align:center;min-height:0;max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s;}
+.fd-result.show{max-height:120px;opacity:1;}
+.fd-rname{font-family:var(--fd);font-size:28px;color:var(--purple);}
+.fd-rlbl{font-size:11px;color:var(--text3);margin-top:4px;font-weight:700;}
+
+/* ══ SLOT OVERLAY ══ */
+.slot-overlay{position:fixed;inset:0;z-index:600;background:rgba(20,10,50,.94);backdrop-filter:blur(8px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  opacity:0;pointer-events:none;transition:opacity .35s;}
+.slot-overlay.open{opacity:1;pointer-events:all;}
+.slot-counter{font-family:var(--fn);font-size:12px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(200,180,255,.7);}
+.slot-machine{width:min(320px,86vw);background:#130A30;border-radius:24px;
+  border:3px solid rgba(180,150,255,.3);box-shadow:0 0 60px rgba(180,150,255,.15),0 30px 80px rgba(0,0,0,.8);overflow:visible;position:relative;}
+.slot-top-bar{background:linear-gradient(135deg,#3D1A8C,#6B2FAD);border-radius:20px 20px 0 0;
+  padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.slot-light{width:10px;height:10px;border-radius:50%;animation:lightBlink 1s ease-in-out infinite alternate;}
+.slot-light:nth-child(1){background:#FF4D8D;animation-delay:0s;}
+.slot-light:nth-child(2){background:#FFD600;animation-delay:.2s;}
+.slot-light:nth-child(3){background:#00C9A7;animation-delay:.4s;}
+.slot-light:nth-child(4){background:#4DA6FF;animation-delay:.6s;}
+.slot-light:nth-child(5){background:#FF4D8D;animation-delay:.8s;}
+@keyframes lightBlink{0%{opacity:.4;transform:scale(.8);}100%{opacity:1;transform:scale(1.2);box-shadow:0 0 8px currentColor;}}
+.slot-window{height:195px;overflow:hidden;position:relative;background:#0D0624;}
+.slot-grad-t{position:absolute;top:0;left:0;right:0;height:55px;background:linear-gradient(to bottom,#0D0624,transparent);z-index:10;pointer-events:none;}
+.slot-grad-b{position:absolute;bottom:0;left:0;right:0;height:55px;background:linear-gradient(to top,#0D0624,transparent);z-index:10;pointer-events:none;}
+.slot-highlight{position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);height:65px;z-index:5;pointer-events:none;
+  border-top:2px solid rgba(255,214,0,.5);border-bottom:2px solid rgba(255,214,0,.5);background:rgba(255,214,0,.05);}
+.slot-glow-l,.slot-glow-r{position:absolute;top:50%;transform:translateY(-50%);width:4px;height:65px;z-index:6;border-radius:2px;background:linear-gradient(to bottom,transparent,var(--yellow),transparent);}
+.slot-glow-l{left:0;}.slot-glow-r{right:0;}
+.slot-reel{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;}
+.slot-item{height:65px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:var(--fd);font-size:clamp(17px,4vw,22px);color:#EDE7FF;
+  padding:0 20px;text-align:center;letter-spacing:.3px;}
+.slot-item.lit{color:var(--yellow-l);text-shadow:0 0 20px rgba(255,214,0,.6);}
+.slot-bottom{background:linear-gradient(135deg,#3D1A8C,#6B2FAD);border-radius:0 0 20px 20px;padding:10px 16px;text-align:center;}
+.slot-result-lbl{font-family:var(--fn);font-size:12px;font-weight:800;color:rgba(200,180,255,.7);letter-spacing:1.5px;text-transform:uppercase;}
+.slot-lever-wrap{position:absolute;right:-30px;top:50%;transform:translateY(-50%);}
+.lever-pole{width:8px;height:70px;background:linear-gradient(to bottom,#8888AA,#444466);border-radius:4px;margin:0 auto;position:relative;}
+.lever-ball{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--pink),#C02060);
+  box-shadow:0 0 10px rgba(255,77,141,.6);position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);}
+.lever-pole.pull{animation:leverAnim .5s cubic-bezier(.16,1,.3,1);}
+@keyframes leverAnim{0%,100%{transform:rotate(0);}40%{transform:rotate(45deg) translateY(6px);}70%{transform:rotate(-8deg);}}
+.slot-overlay.shake{animation:screenShake .5s cubic-bezier(.16,1,.3,1);}
+@keyframes screenShake{
+  0%,100%{transform:translate(0,0);}10%{transform:translate(-10px,-5px);}25%{transform:translate(10px,5px);}
+  40%{transform:translate(-7px,3px);}55%{transform:translate(7px,-3px);}70%{transform:translate(-4px,4px);}85%{transform:translate(4px,-2px);}
+}
+.slot-cancel-btn{padding:10px 28px;border-radius:50px;border:2px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);
+  font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;
+  transition:all .2s;letter-spacing:.5px;}
+.slot-cancel-btn:hover{background:rgba(255,100,100,.25);border-color:rgba(255,100,100,.5);color:#fff;}
+
+/* ══ VETO ══ */
+.veto-overlay{position:fixed;inset:0;z-index:550;background:rgba(45,27,105,.7);
+  backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;}
+.veto-overlay.open{opacity:1;pointer-events:all;}
+.veto-panel{background:var(--cream);border-radius:28px 28px 0 0;width:100%;max-width:600px;
+  padding:24px 20px 40px;transform:translateY(100%);transition:transform .45s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 -20px 60px rgba(124,77,255,.2);}
+.veto-overlay.open .veto-panel{transform:translateY(0);}
+.veto-handle{width:40px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 18px;}
+.veto-title{font-family:var(--fd);font-size:22px;color:var(--text);margin-bottom:4px;}
+.veto-sub{font-size:12px;color:var(--text3);font-weight:700;margin-bottom:16px;}
+.veto-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;max-height:200px;overflow-y:auto;}
+.veto-chip{padding:9px 16px;border-radius:50px;border:2px solid var(--border);
+  background:var(--purple-p);color:var(--text2);font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fn);}
+.veto-chip:hover{border-color:var(--coral);color:var(--coral);background:var(--coral-p);}
+.veto-chip.vetoed{background:var(--coral-p);border-color:var(--coral);color:var(--coral);text-decoration:line-through;opacity:.6;}
+.veto-actions{display:flex;gap:10px;}
+.veto-spin-btn{flex:1;padding:14px;border-radius:16px;border:none;
+  background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;
+  font-family:var(--fd);font-size:18px;cursor:pointer;box-shadow:0 4px 16px rgba(124,77,255,.35);transition:all .2s;}
+.veto-spin-btn:hover{transform:translateY(-2px);}
+.veto-cancel{padding:14px 20px;border-radius:16px;border:2px solid var(--border);
+  background:transparent;color:var(--text3);font-family:var(--fn);font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;}
+.veto-cancel:hover{border-color:var(--text2);color:var(--text2);}
+
+/* ══ ONBOARDING ══ */
+.ob-overlay{position:fixed;inset:0;z-index:900;background:rgba(20,10,50,.85);
+  backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;
+  transition:opacity .4s;}
+.ob-overlay.hidden{opacity:0;pointer-events:none;}
+.ob-modal{background:var(--cream);border:2px solid var(--border);border-radius:32px;
+  padding:32px 24px;width:100%;max-width:400px;text-align:center;
+  box-shadow:0 30px 80px rgba(124,77,255,.3);
+  animation:obPop .6s cubic-bezier(.16,1,.3,1) both;}
+@keyframes obPop{0%{transform:scale(.7) translateY(40px);opacity:0;}100%{transform:scale(1) translateY(0);opacity:1;}}
+.ob-emoji{font-size:52px;display:block;margin-bottom:12px;animation:obBounce 1s ease-in-out infinite alternate;}
+@keyframes obBounce{0%{transform:translateY(0) rotate(-5deg);}100%{transform:translateY(-10px) rotate(5deg);}}
+.ob-title{font-family:var(--fd);font-size:30px;color:var(--text);margin-bottom:6px;}
+.ob-title span{color:var(--pink);}
+.ob-sub{font-size:13px;color:var(--text3);font-weight:700;margin-bottom:24px;}
+.ob-options{display:flex;flex-direction:column;gap:10px;}
+.ob-opt{padding:16px 20px;border-radius:20px;border:2.5px solid var(--border);background:var(--bg2);
+  cursor:pointer;text-align:left;transition:all .2s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;gap:14px;font-family:var(--fn);}
+.ob-opt:hover{transform:translateY(-3px);box-shadow:0 8px 24px var(--shadow);}
+.ob-opt:nth-child(1):hover{border-color:var(--purple);background:var(--purple-p);}
+.ob-opt:nth-child(2):hover{border-color:var(--mint);background:var(--mint-p);}
+.ob-opt:nth-child(3):hover{border-color:var(--orange);background:var(--orange-p);}
+.ob-opt-ico{font-size:28px;flex-shrink:0;}
+.ob-opt-txt strong{display:block;font-size:15px;font-weight:900;color:var(--text);}
+.ob-opt-txt span{font-size:11px;color:var(--text3);font-weight:700;}
+
+/* ══ GENERIC MODALS ══ */
+.modal-overlay{position:fixed;inset:0;z-index:850;background:rgba(45,27,105,.6);
+  backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{background:var(--cream);border:2px solid var(--border);border-radius:24px;
+  padding:24px 22px;width:100%;max-width:360px;text-align:center;
+  box-shadow:0 20px 60px rgba(124,77,255,.2);
+  transform:scale(.9);transition:transform .3s cubic-bezier(.16,1,.3,1);}
+.modal-overlay.open .modal-box{transform:scale(1);}
+.modal-title{font-family:var(--fd);font-size:22px;color:var(--text);margin-bottom:8px;}
+.modal-sub{font-size:13px;color:var(--text3);font-weight:600;margin-bottom:18px;line-height:1.5;}
+.modal-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.modal-btn{flex:1;padding:12px;border-radius:14px;border:none;font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;min-width:80px;}
+.modal-btn.primary{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;}
+.modal-btn.secondary{background:var(--mint-p);border:2px solid rgba(0,201,167,.3);color:var(--mint);}
+.modal-btn.danger{background:var(--coral-p);border:2px solid rgba(255,107,107,.3);color:var(--coral);}
+.modal-btn.ghost{background:transparent;border:2px solid var(--border);color:var(--text3);}
+
+/* ══ EDIT LIST OVERLAY ══ */
+.edit-overlay{position:fixed;inset:0;z-index:700;background:rgba(45,27,105,.65);
+  backdrop-filter:blur(10px);display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;}
+.edit-overlay.open{opacity:1;pointer-events:all;}
+.edit-panel{background:var(--cream);border-radius:28px 28px 0 0;width:100%;max-width:600px;
+  padding:24px 20px 40px;transform:translateY(100%);transition:transform .45s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 -20px 60px rgba(124,77,255,.2);max-height:85vh;overflow-y:auto;}
+.edit-overlay.open .edit-panel{transform:translateY(0);}
+.edit-handle{width:40px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 18px;}
+.edit-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.edit-title-txt{font-family:var(--fd);font-size:20px;color:var(--text);}
+.edit-icon-display{font-size:26px;cursor:pointer;padding:4px 8px;border-radius:10px;border:2px solid var(--border);background:var(--bg2);transition:all .15s;}
+.edit-icon-display:hover{border-color:var(--purple);}
+.edit-icon-picker{display:none;flex-wrap:wrap;gap:5px;margin-bottom:12px;padding:10px;
+  background:var(--bg2);border-radius:14px;border:2px solid var(--border);}
+.edit-icon-picker.open{display:flex;}
+.icon-opt{font-size:22px;padding:5px 7px;border-radius:9px;cursor:pointer;transition:all .15s;border:2px solid transparent;}
+.icon-opt:hover,.icon-opt.selected{background:var(--purple-p);border-color:var(--purple);}
+.edit-meta-row{display:flex;gap:8px;margin-bottom:12px;align-items:center;}
+.edit-rename-inp{flex:1;padding:10px 13px;border-radius:12px;border:2px solid var(--border);
+  background:var(--bg);font-family:var(--fn);font-size:13px;font-weight:700;color:var(--text);outline:none;transition:border-color .2s;}
+.edit-rename-inp:focus{border-color:var(--purple);}
+.edit-tag-row{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap;}
+.edit-tag-btn{padding:5px 11px;border-radius:50px;border:2px solid var(--border);background:var(--bg2);
+  font-size:10px;font-weight:900;color:var(--text3);cursor:pointer;transition:all .15s;font-family:var(--fn);}
+.edit-tag-btn.active{border-color:var(--purple);background:var(--purple-p);color:var(--purple);}
+.edit-chips-area{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;min-height:40px;}
+.edit-chip{display:flex;align-items:center;gap:5px;padding:7px 10px 7px 13px;
+  border-radius:50px;background:var(--purple-p);border:2px solid rgba(124,77,255,.25);
+  font-size:12px;font-weight:800;color:var(--purple);}
+.edit-chip-rm{background:none;border:none;cursor:pointer;font-size:11px;color:var(--purple-l);padding:0 2px;}
+.edit-chip-rm:hover{color:var(--pink);}
+.edit-add-row{display:flex;gap:7px;margin-bottom:16px;}
+.edit-add-inp{flex:1;padding:9px 13px;border-radius:12px;border:2px solid var(--border);
+  background:var(--bg);font-family:var(--fn);font-size:13px;font-weight:700;color:var(--text);outline:none;transition:border-color .2s;}
+.edit-add-inp:focus{border-color:var(--mint);}
+.edit-add-btn{padding:9px 14px;border-radius:12px;border:2px solid var(--mint);
+  background:var(--mint-p);color:var(--mint);font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;transition:all .15s;}
+.edit-add-btn:hover{background:var(--mint);color:#fff;}
+.edit-actions{display:flex;gap:8px;}
+.edit-save{flex:1;padding:13px;border-radius:16px;border:none;
+  background:linear-gradient(135deg,var(--purple),var(--mint));color:#fff;
+  font-family:var(--fd);font-size:18px;cursor:pointer;box-shadow:0 4px 16px rgba(124,77,255,.3);}
+.edit-delete{padding:13px 16px;border-radius:16px;border:2px solid rgba(255,107,107,.4);
+  background:transparent;color:var(--coral);font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;}
+.edit-delete:hover{background:var(--coral-p);border-color:var(--coral);}
+
+/* ══ WRAPPER & HEADER ══ */
+.wrapper{position:relative;z-index:10;width:100%;max-width:560px;}
+.hdr{text-align:center;margin-bottom:20px;}
+
+/* Dramatic slam + float animation */
+.hdr-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:900;
+  letter-spacing:2.5px;text-transform:uppercase;color:var(--purple);background:var(--purple-p);
+  border:2px solid rgba(124,77,255,.25);padding:5px 14px;border-radius:50px;margin-bottom:12px;
+  animation:slamDown .8s cubic-bezier(.16,1,.3,1) both;}
+@keyframes slamDown{0%{opacity:0;transform:translateY(-40px) scale(.7);}60%{transform:translateY(6px) scale(1.05);}80%{transform:translateY(-3px) scale(.98);}100%{opacity:1;transform:translateY(0) scale(1);}}
+
+.hdr h1{font-family:var(--fd);font-size:clamp(36px,9vw,64px);color:var(--text);line-height:1;letter-spacing:.5px;
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0 4px;
+  animation:titleSlam .9s cubic-bezier(.16,1,.3,1) .1s both;}
+@keyframes titleSlam{
+  0%{opacity:0;transform:scale(.3) rotate(-6deg) translateY(30px);}
+  50%{opacity:1;transform:scale(1.12) rotate(2deg);}
+  70%{transform:scale(.97) rotate(-1deg);}
+  85%{transform:scale(1.03) rotate(.5deg);}
+  100%{transform:scale(1) rotate(0);}
+}
+.hdr h1 .word{display:inline-block;animation:titleFloat 4s ease-in-out infinite;}
+.hdr h1 .word:nth-child(1){animation-delay:0s;}
+.hdr h1 .word:nth-child(2){animation-delay:.15s;}
+.hdr h1 .word:nth-child(3){animation-delay:.3s;}
+.hdr h1 .word.pink{color:var(--pink);}
+@keyframes titleFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+
+/* Letter wave — triggered by JS class */
+.hdr h1.wave .letter{display:inline-block;animation:letterWave .6s ease-in-out both;}
+@keyframes letterWave{
+  0%{transform:translateY(0);}
+  30%{transform:translateY(-12px) scale(1.15);}
+  60%{transform:translateY(3px);}
+  100%{transform:translateY(0);}
+}
+.hdr p{margin-top:7px;font-size:13px;color:var(--text3);font-weight:700;
+  animation:slamDown .8s cubic-bezier(.16,1,.3,1) .25s both;}
+
+/* ══ PILL TABS ══ */
+.tab-bar{display:flex;background:var(--bg2);border-radius:18px;padding:4px;gap:4px;margin-bottom:14px;
+  border:2px solid var(--border);box-shadow:0 2px 12px var(--shadow);}
+.tab-btn{flex:1;padding:10px 8px;border-radius:13px;border:none;cursor:pointer;
+  font-family:var(--fn);font-size:12px;font-weight:800;color:var(--text3);
+  background:transparent;transition:all .25s cubic-bezier(.16,1,.3,1);
+  display:flex;align-items:center;justify-content:center;gap:5px;}
+.tab-btn:hover{color:var(--text2);background:rgba(255,255,255,.5);}
+.tab-btn.active{background:var(--cream);color:var(--purple);
+  box-shadow:0 2px 10px rgba(124,77,255,.18),0 1px 3px rgba(0,0,0,.08);}
+.tab-ico{font-size:15px;}
+
+/* ══ PANELS ══ */
+.tab-panel{display:none;animation:panelSlideIn .3s cubic-bezier(.16,1,.3,1);}
+.tab-panel.active{display:block;}
+@keyframes panelSlideIn{from{opacity:0;transform:translateX(16px);}to{opacity:1;transform:translateX(0);}}
+
+/* ══ MEAL TYPE BAR ══ */
+.meal-type-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:12px 16px;border-bottom:2px solid var(--border);}
+.mt-btn{padding:9px 4px;border-radius:14px;border:2px solid var(--border);background:var(--bg2);
+  cursor:pointer;text-align:center;transition:all .2s cubic-bezier(.16,1,.3,1);font-family:var(--fn);}
+.mt-btn:hover{transform:translateY(-2px);border-color:var(--purple-l);}
+.mt-btn.active{transform:translateY(-2px);border-color:var(--purple);background:var(--purple-p);
+  box-shadow:0 0 0 1px var(--purple),0 4px 12px rgba(124,77,255,.2);}
+.mt-ico{font-size:18px;display:block;margin-bottom:3px;}
+.mt-lbl{font-size:10px;font-weight:900;color:var(--text2);display:block;letter-spacing:.3px;}
+.mt-btn.active .mt-lbl{color:var(--purple);}
+
+/* ══ CARDS ══ */
+.card,.list-card,.inout-card{background:var(--cream);border:2px solid var(--border);border-radius:24px;
+  box-shadow:0 8px 40px var(--shadow),0 2px 8px rgba(0,0,0,.04);
+  overflow:hidden;animation:cardUp .8s cubic-bezier(.16,1,.3,1) .1s both;}
+@keyframes cardUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.sec{padding:14px 18px;border-bottom:2px solid var(--border);}
+.sec-lbl{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+
+/* ══ SUB MODE ══ */
+.sub-mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sub-mode-btn{font-family:var(--fn);background:var(--bg2);border:2px solid var(--border);
+  border-radius:16px;padding:12px 10px;cursor:pointer;text-align:center;
+  transition:all .2s cubic-bezier(.16,1,.3,1);font-weight:800;}
+.sub-mode-btn:hover{border-color:var(--purple-l);transform:translateY(-2px);box-shadow:0 4px 12px var(--shadow);}
+.sub-mode-btn.active{border-color:var(--purple);background:var(--purple-p);
+  box-shadow:0 0 0 1px var(--purple),0 4px 14px rgba(124,77,255,.2);}
+.sub-mode-ico{font-size:22px;display:block;margin-bottom:5px;}
+.sub-mode-lbl{font-size:12px;font-weight:900;color:var(--text2);display:block;}
+.sub-mode-btn.active .sub-mode-lbl{color:var(--purple);}
+.sub-mode-sub{font-size:10px;color:var(--text3);margin-top:2px;display:block;font-weight:600;}
+
+/* ══ MOOD ══ */
+.mood-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.mood-btn{font-family:var(--fn);font-size:12px;font-weight:800;padding:7px 12px;
+  border-radius:50px;border:2px solid var(--border);background:var(--bg2);
+  color:var(--text2);cursor:pointer;transition:all .2s cubic-bezier(.16,1,.3,1);}
+.mood-btn:hover{transform:translateY(-2px);}
+.mood-btn.active{transform:translateY(-2px);box-shadow:0 4px 12px var(--shadow);}
+.mood-btn[data-mood="spicy"].active{background:#FFE0D0;border-color:#FF6B35;color:#C03000;}
+.mood-btn[data-mood="cozy"].active{background:#FFE8F0;border-color:#FF6B9D;color:#C0005A;}
+.mood-btn[data-mood="quick"].active{background:#E0F0FF;border-color:#4DA6FF;color:#0060C0;}
+.mood-btn[data-mood="fancy"].active{background:#F0E0FF;border-color:#9B59B6;color:#6A0DAD;}
+.mood-btn[data-mood="healthy"].active{background:var(--mint-p);border-color:var(--mint);color:#005A48;}
+.mood-btn[data-mood="street"].active{background:var(--yellow-p);border-color:var(--yellow);color:#7A5C00;}
+.mood-btn[data-mood="sweet"].active{background:var(--pink-p);border-color:var(--pink);color:#900040;}
+.mood-btn[data-mood="caffeine"].active{background:#FFF0D0;border-color:#C08000;color:#7A4000;}
+
+/* ══ SLIDERS ══ */
+.sliders-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:400px){.sliders-row{grid-template-columns:1fr;gap:10px;}}
+.sl-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.sl-title{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--text3);}
+.sl-val{font-family:var(--fd);font-size:14px;color:var(--purple);
+  background:var(--purple-p);border:2px solid rgba(124,77,255,.2);padding:2px 10px;border-radius:50px;min-width:38px;text-align:center;}
+input[type=range]{-webkit-appearance:none;width:100%;height:7px;border-radius:50px;
+  background:linear-gradient(to right,var(--purple) var(--pct,50%),var(--border) var(--pct,50%));outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+  background:var(--purple);border:3px solid #fff;box-shadow:0 2px 8px rgba(124,77,255,.4);transition:transform .15s;cursor:grab;}
+input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2);}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;border:3px solid #fff;background:var(--purple);}
+.sl-labels{display:flex;justify-content:space-between;margin-top:4px;}
+.sl-labels span{font-size:9px;color:var(--text3);font-weight:700;}
+
+/* ══ STATS ══ */
+.stats-bar{padding:8px 18px;border-bottom:2px solid var(--border);display:flex;}
+.stat-item{flex:1;text-align:center;padding:5px 4px;}
+.stat-item+.stat-item{border-left:1px solid var(--border);}
+.stat-num{font-family:var(--fd);font-size:19px;color:var(--purple);display:block;line-height:1;}
+.stat-lbl{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-top:2px;display:block;}
+
+/* ══ SPIN ACTIONS ══ */
+.action-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 18px;border-bottom:2px solid var(--border);}
+.spin-btn,.list-spin-btn{font-family:var(--fd);font-size:20px;padding:14px;border-radius:18px;border:none;
+  background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;cursor:pointer;
+  position:relative;overflow:hidden;transition:all .25s cubic-bezier(.16,1,.3,1);box-shadow:0 8px 28px rgba(124,77,255,.4);}
+.spin-btn::before,.list-spin-btn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .5s;}
+.spin-btn:hover,.list-spin-btn:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(124,77,255,.5);}
+.spin-btn:hover::before,.list-spin-btn:hover::before{left:150%;}
+.spin-btn:active,.list-spin-btn:active{transform:scale(.97);}
+.spin-btn:disabled,.list-spin-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.lucky-btn{font-family:var(--fd);font-size:15px;padding:14px;border-radius:18px;border:3px solid var(--yellow);
+  background:var(--yellow-p);color:#7A5C00;cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1);font-weight:900;}
+.lucky-btn:hover{background:var(--yellow);color:#3A2A00;transform:translateY(-3px);box-shadow:0 8px 24px rgba(255,214,0,.5);}
+.veto-row{padding:7px 18px 14px;border-bottom:2px solid var(--border);text-align:center;}
+.veto-open-btn{font-family:var(--fn);font-size:12px;font-weight:800;color:var(--text3);
+  background:transparent;border:2px dashed var(--border);border-radius:50px;padding:6px 18px;cursor:pointer;transition:all .2s;}
+.veto-open-btn:hover{border-color:var(--coral);color:var(--coral);background:var(--coral-p);}
+
+/* ══ LIST TAB — new layout ══ */
+/* Section: spots row */
+.list-spots-sec{padding:14px 18px;border-bottom:2px solid var(--border);}
+.list-sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.list-sec-lbl{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--text3);}
+.spots-viewport{overflow:hidden;position:relative;}
+.spots-track{display:flex;flex-wrap:wrap;gap:6px;padding:4px 2px;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);will-change:transform;}
+.spots-page-nav{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.spots-nav-btn{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);
+  background:var(--cream);color:var(--text2);font-size:16px;font-weight:900;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;line-height:1;padding:0;}
+.spots-nav-btn:hover{border-color:var(--purple);background:var(--purple-p);color:var(--purple);}
+.spots-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.spots-page-dot{font-size:10px;font-weight:800;color:var(--text3);white-space:nowrap;}
+.spot-pill{flex-shrink:0;padding:7px 12px 7px 10px;border-radius:50px;font-size:12px;font-weight:800;
+  background:var(--yellow-p);border:2px solid rgba(255,214,0,.45);color:#7A6000;
+  cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+.spot-pill:hover{background:var(--yellow);color:#3A2A00;transform:translateY(-1px);}
+.spot-pill .sp-del{opacity:.35;font-size:10px;margin-left:1px;transition:opacity .15s;}
+.spot-pill:hover .sp-del{opacity:.8;}
+.spot-pill .sp-edit{opacity:.45;font-size:11px;margin-left:3px;transition:all .15s;cursor:pointer;}
+.spot-pill:hover .sp-edit{opacity:1;filter:brightness(0) invert(1);}
+.spots-empty-hint{font-size:12px;color:var(--text3);font-style:italic;font-weight:600;}
+.spots-count-badge{font-size:10px;font-weight:800;color:var(--yellow);background:var(--yellow-p);
+  padding:2px 8px;border-radius:50px;border:1.5px solid rgba(255,214,0,.35);}
+
+/* Section: saved lists as cards */
+.list-lists-sec{padding:14px 18px;border-bottom:2px solid var(--border);}
+.saved-list-cards{display:flex;flex-direction:column;gap:8px;}
+.sl-card{border-radius:16px;border:2px solid var(--border);background:var(--bg2);
+  padding:10px 14px;display:flex;align-items:center;gap:10px;
+  transition:all .2s cubic-bezier(.16,1,.3,1);cursor:pointer;}
+.sl-card:hover{border-color:var(--purple-l);transform:translateY(-1px);box-shadow:0 4px 14px var(--shadow);}
+.sl-card-ico{font-size:26px;flex-shrink:0;}
+.sl-card-info{flex:1;min-width:0;}
+.sl-card-name{font-size:13px;font-weight:900;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sl-card-meta{font-size:10px;color:var(--text3);font-weight:700;margin-top:2px;}
+.sl-card-tag{font-size:9px;font-weight:900;letter-spacing:1px;text-transform:uppercase;
+  padding:2px 7px;border-radius:50px;margin-left:5px;}
+.tag-lunch{background:#FFF8E0;color:#9A7000;border:1px solid #FFD600;}
+.tag-dinner{background:var(--purple-p);color:var(--purple);border:1px solid rgba(124,77,255,.25);}
+.tag-drinks{background:var(--mint-p);color:var(--mint);border:1px solid rgba(0,201,167,.25);}
+.tag-latenight{background:#2D1B69;color:#B39DFF;border:1px solid rgba(179,157,255,.3);}
+.sl-card-actions{display:flex;gap:5px;flex-shrink:0;}
+.sl-card-load{padding:5px 12px;border-radius:50px;border:2px solid var(--purple);background:var(--purple-p);
+  color:var(--purple);font-size:11px;font-weight:800;cursor:pointer;transition:all .15s;white-space:nowrap;font-family:var(--fn);}
+.sl-card-load:hover{background:var(--purple);color:#fff;}
+.sl-card-edit{padding:5px 8px;border-radius:50px;border:2px solid var(--border);background:transparent;
+  color:var(--text3);font-size:11px;cursor:pointer;transition:all .15s;}
+.sl-card-edit:hover{border-color:var(--text2);color:var(--text2);}
+.no-lists-hint{font-size:12px;color:var(--text3);font-style:italic;font-weight:600;}
+
+/* Section: active working list */
+.list-active-sec{padding:14px 18px;border-bottom:2px solid var(--border);}
+.list-active-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.list-active-lbl{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--text3);}
+.list-count-badge{font-size:11px;font-weight:800;color:var(--mint);background:var(--mint-p);
+  padding:2px 9px;border-radius:50px;border:1.5px solid rgba(0,201,167,.25);}
+.chip-input-row{display:flex;gap:7px;margin-bottom:9px;}
+.chip-inp{flex:1;padding:9px 13px;border-radius:14px;border:2px solid var(--border);
+  background:var(--bg);font-family:var(--fn);font-size:13px;font-weight:700;color:var(--text);outline:none;transition:border-color .2s;}
+.chip-inp:focus{border-color:var(--purple);}
+.chip-add{padding:9px 13px;border-radius:14px;border:2px solid var(--purple);
+  background:var(--purple-p);color:var(--purple);font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;transition:all .15s;}
+.chip-add:hover{background:var(--purple);color:#fff;}
+.chips-area{display:flex;flex-wrap:wrap;gap:6px;min-height:32px;}
+.r-chip{display:flex;align-items:center;gap:4px;padding:6px 8px 6px 12px;
+  border-radius:50px;background:var(--purple-p);border:2px solid rgba(124,77,255,.25);
+  font-size:12px;font-weight:800;color:var(--purple);animation:popIn .22s cubic-bezier(.16,1,.3,1) both;}
+.r-chip .star-btn{background:none;border:none;cursor:pointer;font-size:13px;padding:0 3px;line-height:1;transition:transform .15s;}
+.r-chip .star-btn:hover{transform:scale(1.3);}
+.r-chip .rm-btn{background:none;border:none;cursor:pointer;font-size:11px;color:var(--purple-l);padding:0 2px;line-height:1;}
+.r-chip .rm-btn:hover{color:var(--pink);}
+.r-chip .edit-chip-inline{background:none;border:none;cursor:pointer;font-size:10px;padding:0 2px;line-height:1;opacity:0.4;transition:opacity .15s;}
+.r-chip .edit-chip-inline:hover{opacity:1;}
+.chips-empty-hint{font-size:12px;color:var(--text3);font-style:italic;font-weight:600;padding:4px 0;}
+.list-active-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+.clear-list-btn{font-size:11px;font-weight:800;color:var(--coral);background:transparent;
+  border:none;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;transition:opacity .15s;}
+.clear-list-btn:hover{opacity:.7;}
+
+/* Save list area */
+.list-save-sec{padding:12px 18px;border-bottom:2px solid var(--border);background:var(--bg2);}
+.save-list-title{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.save-list-inner{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.icon-picker-preview{font-size:22px;cursor:pointer;padding:5px 9px;border-radius:10px;border:2px solid var(--border);background:var(--cream);transition:all .15s;flex-shrink:0;}
+.icon-picker-preview:hover{border-color:var(--purple);}
+.sl-inp{flex:1;min-width:120px;padding:8px 12px;border-radius:12px;border:2px solid var(--border);
+  background:var(--cream);font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text);outline:none;transition:border-color .2s;}
+.sl-inp:focus{border-color:var(--mint);}
+.sl-save{padding:8px 14px;border-radius:12px;border:2px solid var(--mint);
+  background:var(--mint-p);color:var(--mint);font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;}
+.sl-save:hover{background:var(--mint);color:#fff;}
+.icon-picker-inline{display:none;flex-wrap:wrap;gap:5px;padding:8px;background:var(--cream);border-radius:12px;border:2px solid var(--border);margin-top:8px;}
+.icon-picker-inline.open{display:flex;}
+
+/* List action row */
+.list-action-row{padding:14px 18px;display:flex;flex-direction:column;gap:10px;}
+.list-options-row{display:flex;gap:10px;align-items:center;}
+.list-opts-lbl{font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);white-space:nowrap;}
+.list-action-btns{display:flex;gap:8px;}
+.list-veto-btn{padding:14px 15px;border-radius:18px;border:2px dashed var(--border2);
+  background:transparent;color:var(--text2);font-family:var(--fn);font-size:12px;font-weight:800;
+  cursor:pointer;transition:all .2s;white-space:nowrap;}
+.list-veto-btn:hover{border-color:var(--coral);color:var(--coral);background:var(--coral-p);}
+
+/* ══ IN/OUT TAB ══ */
+.inout-hero{padding:28px 20px 24px;text-align:center;background:linear-gradient(135deg,var(--purple-p),var(--pink-p));}
+.inout-title{font-family:var(--fd);font-size:28px;color:var(--text);margin-bottom:6px;}
+.inout-sub{font-size:13px;color:var(--text2);font-weight:700;}
+.inout-options{padding:20px 18px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.inout-opt{padding:16px 12px;border-radius:20px;border:2.5px solid var(--border);background:var(--bg2);
+  cursor:pointer;text-align:center;transition:all .2s cubic-bezier(.16,1,.3,1);font-family:var(--fn);}
+.inout-opt:hover{transform:translateY(-4px);box-shadow:0 8px 24px var(--shadow);}
+.inout-opt.sel-eat{border-color:var(--purple);background:var(--purple-p);}
+.inout-opt.sel-home{border-color:var(--mint);background:var(--mint-p);}
+.inout-opt.sel-delivery{border-color:var(--orange);background:var(--orange-p);}
+.inout-opt.sel-prep{border-color:var(--yellow);background:var(--yellow-p);}
+.inout-opt-ico{font-size:30px;display:block;margin-bottom:6px;}
+.inout-opt-lbl{font-size:12px;font-weight:900;color:var(--text2);display:block;}
+.inout-opt-sub{font-size:10px;color:var(--text3);margin-top:2px;display:block;font-weight:600;}
+.inout-flip-btn{margin:0 18px 18px;padding:15px;border-radius:18px;border:none;
+  background:linear-gradient(135deg,var(--purple),var(--orange));color:#fff;
+  font-family:var(--fd);font-size:20px;cursor:pointer;width:calc(100% - 36px);
+  box-shadow:0 8px 28px rgba(124,77,255,.4);transition:all .25s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;}
+.inout-flip-btn:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(124,77,255,.5);}
+.inout-result{margin:0 18px 20px;padding:20px;border-radius:20px;
+  background:linear-gradient(135deg,var(--purple-p),var(--pink-p));border:2px solid var(--border2);
+  text-align:center;display:none;animation:cardUp .5s cubic-bezier(.16,1,.3,1);}
+.inout-result.show{display:block;}
+.inout-result-ico{font-size:48px;display:block;margin-bottom:8px;}
+.inout-result-name{font-family:var(--fd);font-size:34px;color:var(--text);}
+.inout-result-sub{font-size:12px;color:var(--text3);font-weight:700;margin-top:4px;}
+
+/* ══ ARENA ══ */
+.arena{min-height:0;max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.16,1,.3,1),padding .4s;width:100%;max-width:560px;}
+.arena.open{max-height:1200px;padding:0 0 12px;}
+.arena-lbl{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text3);margin-bottom:12px;text-align:center;padding-top:4px;}
+.cards-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:12px;min-height:80px;position:relative;}
+.opt-card{background:#fff;border:3px solid var(--border);border-radius:20px;
+  padding:12px 14px;font-family:var(--fd);font-size:clamp(13px,3.5vw,18px);
+  color:var(--text);position:relative;overflow:hidden;box-shadow:0 4px 16px var(--shadow);
+  flex:1 1 110px;max-width:160px;min-width:90px;text-align:center;opacity:0;
+  transition:box-shadow .25s,border-color .25s,transform .25s,opacity .25s;}
+.opt-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.7),transparent);pointer-events:none;}
+.opt-card.dealt{animation:dealCard .5s cubic-bezier(.16,1,.3,1) both;}
+@keyframes dealCard{
+  0%{opacity:0;transform:translateY(40px) scale(.7) rotate(var(--dr,0deg));}
+  60%{transform:translateY(-8px) scale(1.08) rotate(calc(var(--dr,0deg)*.2));}
+  100%{opacity:1;transform:translateY(0) scale(1) rotate(0);}
+}
+/* Selectable mode: cards can be tapped to mark as keep/drop */
+.opt-card.selectable{cursor:pointer;}
+.opt-card.selectable:hover{transform:translateY(-6px) scale(1.04);border-color:var(--purple-l);box-shadow:0 10px 28px rgba(124,77,255,.25);}
+.opt-card.keep-mark{border-color:var(--mint);background:var(--mint-p);box-shadow:0 6px 20px rgba(0,201,167,.3);}
+.opt-card.keep-mark::after{content:'✓ Keep';position:absolute;top:6px;right:6px;font-size:9px;font-weight:900;
+  background:var(--mint);color:#fff;padding:2px 7px;border-radius:50px;font-family:var(--fn);}
+.opt-card.drop-mark{border-color:var(--coral);background:var(--coral-p);opacity:.5;}
+.opt-card.drop-mark::after{content:'✕ Out';position:absolute;top:6px;right:6px;font-size:9px;font-weight:900;
+  background:var(--coral);color:#fff;padding:2px 7px;border-radius:50px;font-family:var(--fn);}
+.opt-card:hover:not(.loser):not(.winner):not(.selectable){transform:translateY(-4px) scale(1.03);border-color:var(--purple-l);box-shadow:0 8px 24px rgba(124,77,255,.2);}
+.opt-card .card-sub{display:block;font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text3);margin-top:3px;}
+.opt-card.pre-battle{animation:cardShakeHold .15s ease-in-out infinite alternate;}
+@keyframes cardShakeHold{from{transform:translateX(-5px) rotate(-1.5deg);}to{transform:translateX(5px) rotate(1.5deg);}}
+
+/* Loser: voted off — shrink + fade sideways */
+.opt-card.loser{
+  animation:cardElim .55s cubic-bezier(.4,0,.6,1) both;
+  pointer-events:none;z-index:1;}
+@keyframes cardElim{
+  0%{opacity:1;transform:scale(1) translateY(0) rotate(0);}
+  20%{transform:scale(1.08) translateY(-6px) rotate(var(--fr,6deg));}
+  100%{opacity:0;transform:scale(.15) translateY(80px) translateX(var(--fx,0px)) rotate(calc(var(--fr,6deg)*5));}
+}
+/* Winner: absolute-positioned move to center, then slam big */
+.opt-card.winner-moving{
+  position:fixed!important;z-index:200;pointer-events:none;
+  transition:left .55s cubic-bezier(.16,1,.3,1),top .55s cubic-bezier(.16,1,.3,1),
+             width .55s cubic-bezier(.16,1,.3,1),height .55s cubic-bezier(.16,1,.3,1),
+             transform .55s cubic-bezier(.16,1,.3,1),
+             border-color .3s,background .3s,box-shadow .3s;}
+.opt-card.winner-final{
+  border-color:var(--yellow)!important;
+  background:linear-gradient(135deg,var(--yellow-p),#FFF9E0)!important;
+  box-shadow:0 0 0 5px var(--yellow),0 20px 60px rgba(255,214,0,.7),0 0 100px rgba(255,214,0,.25)!important;
+  animation:winnerPulse 1.4s cubic-bezier(.16,1,.3,1) both;}
+@keyframes winnerPulse{
+  0%{transform:scale(1);}
+  18%{transform:scale(1.18) rotate(-3deg);}
+  35%{transform:scale(1.12) rotate(2deg);}
+  55%{transform:scale(1.09) rotate(-1deg);}
+  75%{transform:scale(1.07);}
+  100%{transform:scale(1.05);}
+}
+.opt-card.winner{
+  border-color:var(--yellow)!important;
+  background:linear-gradient(135deg,var(--yellow-p),#FFF9E0)!important;
+  box-shadow:0 0 0 4px var(--yellow),0 12px 40px rgba(255,214,0,.5)!important;
+  pointer-events:none;}
+.battle-actions{display:flex;gap:8px;flex-direction:column;}
+.battle-btn{font-family:var(--fd);font-size:16px;padding:13px 24px;border-radius:50px;border:3px solid var(--pink);
+  background:var(--pink-p);color:var(--pink);cursor:pointer;transition:all .2s;display:block;width:100%;margin-bottom:0;}
+.battle-btn:hover{background:var(--pink);color:#fff;}
+.battle-btn:disabled{opacity:.35;cursor:not-allowed;}
+.battle-sub-row{display:flex;gap:8px;}
+.battle-respin-btn{flex:1;font-family:var(--fn);font-size:12px;font-weight:800;padding:10px 14px;
+  border-radius:50px;border:2px solid var(--purple-l);background:transparent;
+  color:var(--text2);cursor:pointer;transition:all .2s;}
+.battle-respin-btn:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-p);}
+.battle-select-hint{font-size:11px;color:var(--text3);font-weight:700;text-align:center;padding:6px 0 2px;
+  animation:hintFloat 2s ease-in-out infinite alternate;}
+.rematch-btn{font-family:var(--fn);font-size:12px;font-weight:800;padding:9px 18px;
+  border-radius:50px;border:2px dashed var(--purple-l);background:transparent;
+  color:var(--text3);cursor:pointer;transition:all .2s;display:none;width:100%;}
+.rematch-btn:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-p);}
+.rematch-btn.show{display:block;}
+
+/* ══ RESULT ══ */
+.result-sec{background:var(--cream);border:2px solid var(--border);border-radius:24px;
+  margin-top:12px;overflow:hidden;max-height:0;opacity:0;
+  transition:max-height .6s cubic-bezier(.16,1,.3,1),opacity .4s;box-shadow:0 8px 40px var(--shadow);}
+.result-sec.open{max-height:500px;opacity:1;}
+.result-inner{padding:22px 18px;text-align:center;}
+.r-name{font-family:var(--fd);font-size:clamp(32px,8vw,58px);color:var(--text);letter-spacing:.3px;line-height:1;}
+@keyframes resultSlam{0%{opacity:0;transform:scale(.4) translateY(20px);}55%{transform:scale(1.1);}75%{transform:scale(.97);}100%{opacity:1;transform:scale(1);}}
+.r-sub{font-size:13px;color:var(--text3);margin-top:6px;font-weight:700;}
+.nfi-btn{font-family:var(--fn);font-size:12px;font-weight:800;color:var(--text3);
+  background:transparent;border:none;cursor:pointer;padding:6px 10px;margin-top:8px;
+  text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;}
+.nfi-btn:hover{color:var(--text2);}
+.r-actions{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.r-btn{font-family:var(--fn);font-size:12px;font-weight:800;padding:9px 16px;border-radius:50px;
+  cursor:pointer;transition:all .18s;border:2px solid var(--border);background:transparent;color:var(--text2);}
+.r-btn:hover{border-color:var(--text2);background:var(--bg);}
+.r-btn.fav{color:var(--pink);border-color:rgba(255,77,141,.35);}
+.r-btn.fav:hover{background:var(--pink-p);border-color:var(--pink);}
+.r-btn.fav.on{background:var(--pink);border-color:var(--pink);color:#fff;}
+.r-btn.share{color:var(--mint);border-color:rgba(0,201,167,.35);}
+.r-btn.share:hover{background:var(--mint-p);border-color:var(--mint);}
+.r-name.out{animation:slideOut .3s cubic-bezier(.4,0,1,1) both;}
+@keyframes slideOut{to{opacity:0;transform:translateX(60px) scale(.88);}}
+.r-name.inn{animation:slideIn .4s cubic-bezier(.16,1,.3,1) both;}
+@keyframes slideIn{from{opacity:0;transform:translateX(-60px) scale(.88);}to{opacity:1;transform:translateX(0) scale(1);}}
+
+/* ══ HISTORY / FAVS ══ */
+.hist-sec,.favs-sec{margin-top:10px;display:none;}
+.hist-sec.has-items,.favs-sec.has-items{display:block;}
+.hist-lbl,.favs-lbl{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:7px;text-align:center;}
+.hist-chips,.fav-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.h-chip{font-size:12px;font-weight:800;color:var(--text2);background:var(--cream);
+  border:2px solid var(--border);padding:5px 13px;border-radius:50px;animation:popIn .3s cubic-bezier(.16,1,.3,1) both;}
+.h-chip.faded{opacity:.35;}
+.fav-chip{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:800;
+  color:var(--pink);background:var(--pink-p);border:2px solid rgba(255,77,141,.25);
+  padding:5px 8px 5px 13px;border-radius:50px;cursor:pointer;transition:all .15s;
+  animation:popIn .3s cubic-bezier(.16,1,.3,1) both;}
+.fav-chip:hover{background:rgba(255,77,141,.15);border-color:var(--pink);}
+.fav-chip-x{background:none;border:none;font-size:11px;color:var(--pink-l);cursor:pointer;padding:0;}
+
+/* ══ RIPPLE ══ */
+.rw{position:relative;overflow:hidden;}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);
+  pointer-events:none;animation:rippleAnim .55s ease-out forwards;}
+@keyframes rippleAnim{0%{width:0;height:0;opacity:.6;transform:translate(-50%,-50%);}100%{width:200px;height:200px;opacity:0;transform:translate(-50%,-50%);}}
+
+@keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+
+@media(max-width:480px){
+  body{padding:14px 10px 100px;}
+  .chef-fixed{width:54px;height:54px;bottom:14px;right:14px;}
+  .chef-fixed svg{width:54px;height:54px;}
+  .fd-fab{bottom:90px;left:14px;}
+  .opt-card{flex:1 1 90px;min-width:80px;}
+}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="aurora"></div>
+<div class="stars-layer" id="starsLayer"></div>
+<div class="food-layer" id="foodLayer"></div>
+
+<!-- CHEF -->
+<div class="chef-fixed" id="chefEl" onclick="chefReact('bounce')">
+  <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="40" cy="76" rx="22" ry="5" fill="rgba(124,77,255,0.15)"/>
+    <rect x="18" y="52" width="44" height="24" rx="10" fill="#EDE7FF" stroke="#D4C5F5" stroke-width="1.5"/>
+    <rect x="26" y="54" width="28" height="20" rx="6" fill="white" stroke="#E8E0FF" stroke-width="1"/>
+    <circle cx="40" cy="37" r="20" fill="#FDDBB4" stroke="#E8C090" stroke-width="1.5"/>
+    <g id="ce">
+      <path d="M32 35 Q34 32 36 35" stroke="#2D1B69" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M44 35 Q46 32 48 35" stroke="#2D1B69" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    </g>
+    <path id="cm" d="M34 43 Q40 48 46 43" stroke="#C07040" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="29" cy="42" r="4" fill="rgba(255,150,100,0.22)"/>
+    <circle cx="51" cy="42" r="4" fill="rgba(255,150,100,0.22)"/>
+    <rect x="23" y="17" width="34" height="10" rx="4" fill="white" stroke="#D4C5F5" stroke-width="1.5"/>
+    <ellipse cx="40" cy="17" rx="16" ry="12" fill="white" stroke="#D4C5F5" stroke-width="1.5"/>
+    <rect x="23" y="24" width="34" height="3" rx="1.5" fill="#B39DFF"/>
+  </svg>
+</div>
+
+<!-- FAB -->
+<div class="fd-fab">
+  <div class="fd-fab-hint">Already at the spot? ⚡</div>
+  <button class="fd-fab-btn rw" onclick="openFD()">⚡ Quick Pick</button>
+</div>
+
+<!-- FD OVERLAY -->
+<div class="fd-overlay" id="fdOverlay" onclick="closeFDOut(event)">
+  <div class="fd-modal" id="fdModal">
+    <button class="fd-close" onclick="closeFD()">✕</button>
+    <div class="fd-title">Quick <span>Pick</span> ⚡</div>
+    <div class="fd-sub">Deciding between specific options right now?</div>
+    <div class="fd-input-row">
+      <input class="fd-inp" id="fdInp" placeholder="e.g. Steak, Ramen…" onkeydown="fdKey(event)">
+      <button class="fd-add" onclick="fdAdd()">+ Add</button>
+    </div>
+    <div class="fd-chips" id="fdChips"></div>
+    <div class="fd-slot-wrap" id="fdSlotWrap">
+      <div class="fd-slot-shadow-t"></div><div class="fd-slot-shadow-b"></div>
+      <div class="fd-slot-line"></div>
+      <div class="fd-slot-reel" id="fdReel"></div>
+    </div>
+    <div class="coin-arena" id="coinArena">
+      <div style="text-align:center">
+        <div class="coin" id="theCoin">
+          <div class="coin-face coin-h" id="coinH">H</div>
+          <div class="coin-face coin-t" id="coinT">T</div>
+        </div>
+        <div class="coin-lbl" id="coinLbl">Add 2 options, then flip!</div>
+      </div>
+    </div>
+    <div class="fd-actions">
+      <button class="fd-go" id="fdGo" onclick="fdReveal()" disabled>🎯 Reveal</button>
+      <button class="fd-coin" id="fdCoin" onclick="fdFlip()">🪙 Coin Flip</button>
+    </div>
+    <div class="fd-result" id="fdResult">
+      <div class="fd-rname" id="fdRName"></div>
+      <div class="fd-rlbl" id="fdRLbl"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLOT OVERLAY -->
+<div class="slot-overlay" id="slotOverlay">
+  <div class="slot-counter" id="slotCounter"></div>
+  <div class="slot-machine">
+    <div class="slot-top-bar">
+      <div class="slot-light"></div><div class="slot-light"></div><div class="slot-light"></div>
+      <div class="slot-light"></div><div class="slot-light"></div>
+    </div>
+    <div class="slot-window">
+      <div class="slot-grad-t"></div><div class="slot-grad-b"></div>
+      <div class="slot-highlight"></div>
+      <div class="slot-glow-l"></div><div class="slot-glow-r"></div>
+      <div class="slot-reel" id="slotReel"></div>
+    </div>
+    <div class="slot-bottom"><div class="slot-result-lbl" id="slotLbl">Get ready…</div></div>
+    <div class="slot-lever-wrap">
+      <div class="lever-pole" id="lever"><div class="lever-ball"></div></div>
+    </div>
+  </div>
+  <button class="slot-cancel-btn" onclick="cancelSpin()">✕ Cancel</button>
+</div>
+
+<!-- VETO -->
+<div class="veto-overlay" id="vetoOverlay" onclick="closeVetoOut(event)">
+  <div class="veto-panel">
+    <div class="veto-handle"></div>
+    <div class="veto-title">🚫 Veto Mode</div>
+    <div class="veto-sub">Tap anything you DON'T want. Then spin the rest.</div>
+    <div class="veto-chips" id="vetoChips"></div>
+    <div class="veto-actions">
+      <button class="veto-cancel" onclick="closeVeto()">Cancel</button>
+      <button class="veto-spin-btn" onclick="vetoAndSpin()">Spin remaining →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="ob-overlay" id="obOverlay">
+  <div class="ob-modal">
+    <span class="ob-emoji">🍜</span>
+    <div class="ob-title">What's the <span>Vibe?</span></div>
+    <div class="ob-sub">What kind of decision do you need help with today?</div>
+    <div class="ob-options">
+      <div class="ob-opt" onclick="obChoose('spin')">
+        <span class="ob-opt-ico">🎰</span>
+        <div class="ob-opt-txt"><strong>What to eat / drink</strong><span>Spin for a cuisine or dish</span></div>
+      </div>
+      <div class="ob-opt" onclick="obChoose('list')">
+        <span class="ob-opt-ico">📋</span>
+        <div class="ob-opt-txt"><strong>Choose from my list</strong><span>Pick from saved spots</span></div>
+      </div>
+      <div class="ob-opt" onclick="obChoose('inout')">
+        <span class="ob-opt-ico">🏠</span>
+        <div class="ob-opt-txt"><strong>In or out?</strong><span>Eat out, cook, delivery…</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GENERIC MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-sub" id="modalSub"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<!-- EDIT LIST -->
+<div class="edit-overlay" id="editOverlay" onclick="closeEditOut(event)">
+  <div class="edit-panel">
+    <div class="edit-handle"></div>
+    <div class="edit-header">
+      <div class="edit-title-txt" id="editTitle">Edit List</div>
+      <div class="edit-icon-display" id="editIconDisplay" onclick="toggleEditIconPicker()">📂</div>
+    </div>
+    <div class="edit-icon-picker" id="editIconPicker"></div>
+    <div class="edit-meta-row">
+      <input class="edit-rename-inp" id="editNameInp" placeholder="List name…">
+    </div>
+    <div style="font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:7px;">Meal type tag</div>
+    <div class="edit-tag-row" id="editTagRow"></div>
+    <div style="font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;margin-top:4px;">Places</div>
+    <div class="edit-chips-area" id="editChipsArea"></div>
+    <div class="edit-add-row">
+      <input class="edit-add-inp" id="editAddInp" placeholder="Add a place…" onkeydown="editAddKey(event)">
+      <button class="edit-add-btn" onclick="editAddItem()">+ Add</button>
+    </div>
+    <div class="edit-actions">
+      <button class="edit-delete" onclick="deleteEditList()">🗑 Delete</button>
+      <button class="edit-save" onclick="saveEditList()">✓ Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPOT RENAME OVERLAY -->
+<div class="modal-overlay" id="spotRenameOverlay" onclick="if(event.target===this)closeSpotRename()">
+  <div class="modal-box">
+    <div class="modal-title">✏️ Rename Spot</div>
+    <div class="modal-sub">Edit the name of this saved spot</div>
+    <input class="edit-rename-inp" id="spotRenameInp" placeholder="Spot name…" style="width:100%;margin-bottom:14px;" onkeydown="if(event.key==='Enter')saveSpotRename()">
+    <div class="modal-actions">
+      <button class="modal-btn ghost" onclick="closeSpotRename()">Cancel</button>
+      <button class="modal-btn primary" onclick="saveSpotRename()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+  <header class="hdr">
+    <div class="hdr-tag">🎲 Vibe Randomizer</div>
+    <h1 id="mainTitle">
+      <span class="word">What's</span><span style="display:inline-block;width:8px"></span><span class="word">the</span><span style="display:inline-block;width:8px"></span><span class="word pink">Vibe?</span>
+    </h1>
+    <p>Eat, drink, or vibe — let fate decide ✨</p>
+  </header>
+
+  <!-- TABS -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tabSpin" onclick="switchTab('spin')"><span class="tab-ico">🎰</span> Spin</button>
+    <button class="tab-btn" id="tabList" onclick="switchTab('list')"><span class="tab-ico">📋</span> My List</button>
+    <button class="tab-btn" id="tabInout" onclick="switchTab('inout')"><span class="tab-ico">🏠</span> In/Out</button>
+  </div>
+
+  <!-- SPIN TAB -->
+  <div class="tab-panel active" id="panelSpin">
+    <div class="card">
+      <div class="meal-type-bar" id="spinMTBar">
+        <button class="mt-btn" data-mt="lunch" onclick="setMealType('lunch')"><span class="mt-ico">☀️</span><span class="mt-lbl">Lunch</span></button>
+        <button class="mt-btn active" data-mt="dinner" onclick="setMealType('dinner')"><span class="mt-ico">🌙</span><span class="mt-lbl">Dinner</span></button>
+        <button class="mt-btn" data-mt="drinks" onclick="setMealType('drinks')"><span class="mt-ico">🧋</span><span class="mt-lbl">Drinks</span></button>
+        <button class="mt-btn" data-mt="latenight" onclick="setMealType('latenight')"><span class="mt-ico">🌃</span><span class="mt-lbl">Late Night</span></button>
+      </div>
+      <div class="sec">
+        <div class="sec-lbl">What to pick</div>
+        <div class="sub-mode-row">
+          <button class="sub-mode-btn active" data-m="cuisine"><span class="sub-mode-ico">🗺️</span><span class="sub-mode-lbl">Cuisine</span><span class="sub-mode-sub">Korean, Italian…</span></button>
+          <button class="sub-mode-btn" data-m="dish"><span class="sub-mode-ico">🍜</span><span class="sub-mode-lbl">Dish</span><span class="sub-mode-sub">Ramen, tacos…</span></button>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-lbl">Mood (up to 2)</div>
+        <div class="mood-grid" id="moodGrid"></div>
+      </div>
+      <div class="sec">
+        <div class="sliders-row">
+          <div>
+            <div class="sl-top"><span class="sl-title">Hunger</span><span class="sl-val" id="hungerVal">😋</span></div>
+            <input type="range" id="hungerSlider" min="0" max="3" step="1" value="1" oninput="updateSlider(this,'hungerVal',HUNGER_EMOJI)">
+            <div class="sl-labels"><span>Light</span><span>Feast</span></div>
+          </div>
+          <div>
+            <div class="sl-top"><span class="sl-title">Options</span><span class="sl-val" id="optVal">3</span></div>
+            <input type="range" id="optSlider" min="1" max="5" step="1" value="3" oninput="updateOptSlider(this,'optVal')">
+            <div class="sl-labels"><span>1</span><span>5</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-item"><span class="stat-num" id="statSpins">0</span><span class="stat-lbl">Spins</span></div>
+        <div class="stat-item"><span class="stat-num" id="statTop">–</span><span class="stat-lbl">Top pick</span></div>
+        <div class="stat-item"><span class="stat-num" id="statStreak">0🔥</span><span class="stat-lbl">Streak</span></div>
+      </div>
+      <div class="action-row">
+        <button class="spin-btn rw" id="spinBtn" onclick="doSpin()">🎲 Spin</button>
+        <button class="lucky-btn rw" onclick="doLucky()">🍀 Lucky Roll</button>
+      </div>
+      <div class="veto-row">
+        <button class="veto-open-btn" onclick="openVetoMode()">🚫 Veto options first…</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST TAB -->
+  <div class="tab-panel" id="panelList">
+    <div class="list-card">
+      <!-- Meal type -->
+      <div class="meal-type-bar" id="listMTBar">
+        <button class="mt-btn" data-mt="lunch" onclick="setMealType('lunch')"><span class="mt-ico">☀️</span><span class="mt-lbl">Lunch</span></button>
+        <button class="mt-btn active" data-mt="dinner" onclick="setMealType('dinner')"><span class="mt-ico">🌙</span><span class="mt-lbl">Dinner</span></button>
+        <button class="mt-btn" data-mt="drinks" onclick="setMealType('drinks')"><span class="mt-ico">🧋</span><span class="mt-lbl">Drinks</span></button>
+        <button class="mt-btn" data-mt="latenight" onclick="setMealType('latenight')"><span class="mt-ico">🌃</span><span class="mt-lbl">Late Night</span></button>
+      </div>
+
+      <!-- Saved spots (filtered) -->
+      <div class="list-spots-sec">
+        <div class="list-sec-header">
+          <span class="list-sec-lbl">⭐ Saved spots</span>
+          <div class="spots-page-nav" id="spotsPageNav" style="display:none">
+            <button class="spots-nav-btn" id="spotsPrev" onclick="spotsPage(-1)">‹</button>
+            <span class="spots-page-dot" id="spotsPageDot"></span>
+            <button class="spots-nav-btn" id="spotsNext" onclick="spotsPage(1)">›</button>
+          </div>
+          <span class="spots-count-badge" id="spotsCountBadge" style="display:none">0</span>
+        </div>
+        <div class="spots-viewport" id="spotsViewport">
+          <div class="spots-track" id="spotsTrack">
+            <span class="spots-empty-hint">No spots saved for this meal type yet</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Saved lists (filtered) -->
+      <div class="list-lists-sec">
+        <div class="list-sec-header">
+          <span class="list-sec-lbl">📂 Saved lists</span>
+        </div>
+        <div class="saved-list-cards" id="savedListCards">
+          <span class="no-lists-hint">No lists saved for this meal type yet</span>
+        </div>
+      </div>
+
+      <!-- Active working list -->
+      <div class="list-active-sec">
+        <div class="list-active-header">
+          <span class="list-active-lbl">Now spinning</span>
+          <span class="list-count-badge" id="listCountBadge">0 places</span>
+        </div>
+        <div class="chip-input-row">
+          <input class="chip-inp" id="chipInp" placeholder="Add a restaurant or place…" onkeydown="chipKey(event)">
+          <button class="chip-add" onclick="addChip()">+ Add</button>
+        </div>
+        <div class="chips-area" id="chipsArea">
+          <span class="chips-empty-hint">Tap a saved spot above, or type to add</span>
+        </div>
+        <div class="list-active-footer">
+          <span style="font-size:11px;color:var(--text3);font-weight:700;">Tap ☆ to pin a spot</span>
+          <button class="clear-list-btn" onclick="clearListPrompt()">✕ Clear all</button>
+        </div>
+      </div>
+
+      <!-- Save list -->
+      <div class="list-save-sec">
+        <div class="save-list-title">Save this list</div>
+        <div class="save-list-inner">
+          <div class="icon-picker-preview" id="newListIconPreview" onclick="toggleNewIconPicker()">📂</div>
+          <input class="sl-inp" id="slName" placeholder="Name (e.g. UIUC spots)">
+          <button class="sl-save" onclick="saveList()">💾 Save</button>
+        </div>
+        <div class="icon-picker-inline" id="newListIconPicker"></div>
+      </div>
+
+      <!-- Options + actions -->
+      <div class="list-action-row">
+        <div class="list-options-row">
+          <span class="list-opts-lbl">Options</span>
+          <div style="flex:1">
+            <input type="range" id="listOptSlider" min="1" max="10" step="1" value="3" oninput="updateOptSlider(this,'listOptVal')">
+          </div>
+          <span class="sl-val" id="listOptVal" style="margin-left:8px">3</span>
+        </div>
+        <div class="list-action-btns">
+          <button class="list-spin-btn rw" id="listSpinBtn" onclick="doListSpin()">🎲 Spin my list</button>
+          <button class="list-veto-btn" onclick="openVetoModeList()">🚫 Veto first</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IN/OUT TAB -->
+  <div class="tab-panel" id="panelInout">
+    <div class="inout-card">
+      <div class="inout-hero">
+        <div class="inout-title">🏠 In or Out?</div>
+        <div class="inout-sub">Can't decide whether to go out or stay in?<br>Let fate make the call.</div>
+      </div>
+      <div class="inout-options">
+        <div class="inout-opt sel-eat" data-io="eat" onclick="toggleIOOpt(this)"><span class="inout-opt-ico">🍽️</span><span class="inout-opt-lbl">Eat out</span><span class="inout-opt-sub">Restaurant vibes</span></div>
+        <div class="inout-opt sel-home" data-io="home" onclick="toggleIOOpt(this)"><span class="inout-opt-ico">👨‍🍳</span><span class="inout-opt-lbl">Cook at home</span><span class="inout-opt-sub">Chef mode on</span></div>
+        <div class="inout-opt sel-delivery" data-io="delivery" onclick="toggleIOOpt(this)"><span class="inout-opt-ico">🛵</span><span class="inout-opt-lbl">Order delivery</span><span class="inout-opt-sub">Couch locked</span></div>
+        <div class="inout-opt sel-prep" data-io="prep" onclick="toggleIOOpt(this)"><span class="inout-opt-ico">📦</span><span class="inout-opt-lbl">Meal prep</span><span class="inout-opt-sub">Future you wins</span></div>
+      </div>
+      <button class="inout-flip-btn rw" onclick="doInOut()">🎲 Decide for me!</button>
+      <div class="inout-result" id="inoutResult">
+        <span class="inout-result-ico" id="inoutIco">🍽️</span>
+        <div class="inout-result-name" id="inoutName">–</div>
+        <div class="inout-result-sub" id="inoutSub"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARENA + RESULT (shared across all tabs) -->
+  <div class="arena" id="arena">
+    <div class="arena-lbl" id="arenaLbl"></div>
+    <div class="cards-grid" id="cardsGrid"></div>
+    <div class="battle-actions" id="battleActions">
+      <div class="battle-select-hint" id="battleSelectHint" style="display:none">Tap cards to keep ✓ or drop ✕ before spinning</div>
+      <button class="battle-btn" id="battleBtn" onclick="doBattle()">⚡ Battle — pick the winner!</button>
+      <div class="battle-sub-row" id="battleSubRow" style="display:none">
+        <button class="battle-respin-btn" onclick="battleRespinSelected()">🔄 Re-spin marked</button>
+        <button class="battle-respin-btn" onclick="battleRespinAll()">🎲 Spin all again</button>
+      </div>
+    </div>
+    <button class="rematch-btn" id="rematchBtn" onclick="doRematch()">🔁 Rematch last 3 results</button>
+  </div>
+
+  <div class="result-sec" id="resultSec">
+    <div class="result-inner">
+      <div class="r-name" id="rName">–</div>
+      <div class="r-sub" id="rSub"></div>
+      <button class="nfi-btn" onclick="notFeelingIt()">😑 Not feeling it</button>
+      <div class="r-actions">
+        <button class="r-btn fav rw" id="favBtn" onclick="toggleFav()">♥ Save</button>
+        <button class="r-btn share" onclick="shareResult()">↗ Share</button>
+        <button class="r-btn" id="respinBtn" onclick="doRespinFromResult()" style="display:none">🔄 Re-spin these</button>
+        <button class="r-btn" id="respinAllBtn" onclick="doRespinAll()" style="display:none">🎲 Spin fresh</button>
+        <button class="r-btn" onclick="resetAll()">↩ Start over</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="hist-sec" id="histSec"><div class="hist-lbl">Recent picks</div><div class="hist-chips" id="histChips"></div></div>
+  <div class="favs-sec" id="favsSec"><div class="favs-lbl">Saved favorites</div><div class="fav-chips" id="favChips"></div></div>
+</div>
+
+<script>
+/* ══ DATA ══ */
+const MEAL_TYPES={
+  lunch:{
+    cuisine:["Japanese","Mexican","Vietnamese","Mediterranean","American","Korean","Thai","Chinese","Indian","Greek","Lebanese","Taiwanese","Turkish"],
+    dish:["Ramen","Burger","Tacos","Pho","Banh mi","Bibimbap","Pad Thai","Falafel wrap","Gyros","Poke bowl","Fried rice","Sushi","Dumplings","Shakshuka","Schnitzel","Katsu curry","Smash burger","Bao buns"],
+    moods:{spicy:{label:"🌶️ Spicy",cuisine:["Mexican","Indian","Korean","Thai"],dish:["Tacos","Bibimbap","Pad Thai","Shakshuka"]},cozy:{label:"🧸 Cozy",cuisine:["Japanese","American","Korean"],dish:["Ramen","Pho","Butter chicken"]},quick:{label:"⚡ Quick",cuisine:["Mexican","Japanese","Vietnamese","Greek"],dish:["Tacos","Banh mi","Falafel wrap","Smash burger","Poke bowl"]},healthy:{label:"🥗 Healthy",cuisine:["Japanese","Vietnamese","Mediterranean","Greek"],dish:["Poke bowl","Sushi","Banh mi","Shakshuka"]},street:{label:"🛵 Street",cuisine:["Mexican","Vietnamese","Thai","Taiwanese"],dish:["Tacos","Banh mi","Dumplings","Bao buns"]},fancy:{label:"✨ Fancy",cuisine:["Japanese","French","Mediterranean"],dish:["Sushi","Grilled salmon","Ceviche"]}}
+  },
+  dinner:{
+    cuisine:["Italian","Japanese","Korean","Mexican","Indian","Thai","French","Chinese","Mediterranean","American","Ethiopian","Spanish","Lebanese","Vietnamese","Brazilian","Peruvian","Cajun","Turkish","Moroccan","Filipino","German"],
+    dish:["Ramen","Burger","Pizza","Sushi","Tacos","Pasta","Bibimbap","Pho","Curry","Steak","Pad Thai","BBQ ribs","Grilled salmon","Dumplings","Paella","Lasagna","Butter chicken","Udon","Jerk chicken","Katsu curry","Birria tacos","Smash burger","Tonkatsu","Gumbo","Mac & cheese","Ceviche","Fish & chips","Gyros","Shakshuka","Schnitzel"],
+    moods:{spicy:{label:"🌶️ Spicy",cuisine:["Mexican","Indian","Korean","Thai","Cajun","Ethiopian"],dish:["Tacos","Curry","Bibimbap","Pad Thai","Jerk chicken","Gumbo","Birria tacos"]},cozy:{label:"🧸 Cozy",cuisine:["Italian","American","Japanese","French","Korean","German"],dish:["Ramen","Pasta","Mac & cheese","Lasagna","Butter chicken","Pho","Udon"]},quick:{label:"⚡ Quick",cuisine:["Mexican","Japanese","American","Vietnamese","Greek"],dish:["Tacos","Sushi","Burger","Banh mi","Gyros","Smash burger"]},fancy:{label:"✨ Fancy",cuisine:["French","Japanese","Italian","Spanish","Peruvian"],dish:["Steak","Sushi","Paella","Grilled salmon","Ceviche","Pasta"]},healthy:{label:"🥗 Healthy",cuisine:["Japanese","Vietnamese","Greek","Mediterranean","Lebanese"],dish:["Poke bowl","Sushi","Grilled salmon","Ceviche","Pho","Bibimbap"]},street:{label:"🛵 Street",cuisine:["Mexican","Vietnamese","Thai","Korean","Taiwanese","Cajun"],dish:["Tacos","Banh mi","Gyros","Dumplings","Birria tacos","Pad Thai"]}}
+  },
+  drinks:{
+    cuisine:["Boba shop","Coffee café","Juice bar","Smoothie spot","Tea house","Matcha bar","Korean café","Dessert café","Milk tea spot","Açaí bar","Fresh juice stand","Bubble waffle café","Cheese tea shop","Taro place","Bar & pub","Craft cocktail bar","Wine bar","Rooftop bar"],
+    dish:["Brown sugar boba","Taro milk tea","Matcha latte","Mango smoothie","Strawberry açaí","Iced americano","Thai tea","Fruit punch","Dirty chai","Oat milk latte","Cheese foam tea","Coconut water","Lychee soda","Watermelon juice","Mojito","Aperol spritz","Craft beer","Espresso tonic","Passion fruit tea","Hojicha latte"],
+    moods:{sweet:{label:"🍬 Sweet",cuisine:["Boba shop","Dessert café","Milk tea spot","Taro place","Cheese tea shop"],dish:["Brown sugar boba","Taro milk tea","Mango smoothie","Strawberry açaí","Lychee soda"]},cozy:{label:"🧸 Cozy",cuisine:["Coffee café","Tea house","Matcha bar","Korean café"],dish:["Matcha latte","Dirty chai","Oat milk latte","Hojicha latte","Iced americano"]},quick:{label:"⚡ Quick",cuisine:["Boba shop","Juice bar","Fresh juice stand"],dish:["Iced americano","Coconut water","Watermelon juice","Fruit punch"]},fancy:{label:"✨ Fancy",cuisine:["Craft cocktail bar","Wine bar","Rooftop bar","Matcha bar"],dish:["Aperol spritz","Mojito","Espresso tonic","Craft beer"]},caffeine:{label:"☕ Caffeine",cuisine:["Coffee café","Matcha bar","Korean café"],dish:["Iced americano","Dirty chai","Espresso tonic","Matcha latte","Oat milk latte"]},street:{label:"🛵 Street",cuisine:["Fresh juice stand","Boba shop","Taro place"],dish:["Fruit punch","Coconut water","Lychee soda","Passion fruit tea"]}}
+  },
+  latenight:{
+    cuisine:["Korean","Japanese","American","Mexican","Thai","Vietnamese","Chinese","Taiwanese","Cajun"],
+    dish:["Ramen","Smash burger","Birria tacos","Fried chicken","Instant noodles","Grilled cheese","Pho","Katsu curry","Mac & cheese","Tteokbokki","Corn dog","Quesadilla","Cup noodles","Leftover pizza","Dakgalbi","Hot pot","Fried rice"],
+    moods:{spicy:{label:"🌶️ Spicy",cuisine:["Korean","Mexican","Thai","Cajun"],dish:["Tteokbokki","Birria tacos","Dakgalbi"]},cozy:{label:"🧸 Cozy",cuisine:["Japanese","American","Korean"],dish:["Ramen","Instant noodles","Grilled cheese","Mac & cheese","Cup noodles"]},quick:{label:"⚡ Quick",cuisine:["American","Mexican","Taiwanese"],dish:["Smash burger","Quesadilla","Corn dog","Leftover pizza","Cup noodles"]},street:{label:"🛵 Street",cuisine:["Korean","Mexican","Taiwanese","American"],dish:["Tteokbokki","Birria tacos","Corn dog","Fried chicken"]},fancy:{label:"✨ Fancy",cuisine:["Japanese","Korean","Chinese"],dish:["Hot pot","Ramen","Dakgalbi"]},healthy:{label:"🥗 Healthy",cuisine:["Japanese","Vietnamese"],dish:["Pho","Ramen","Fried rice"]}}
+  }
+};
+
+const SUBS={
+  Italian:"Pasta, risotto & wood-fired pizza",Japanese:"Sushi, ramen & izakaya vibes",Mexican:"Tacos, burritos & bold salsas",Chinese:"Dumplings, noodles & stir-fry",Indian:"Curry, tandoor & bold spices",Korean:"BBQ, bibimbap & kimchi stew",Thai:"Noodles, curries & fresh herbs",Mediterranean:"Fresh, vibrant & olive-oil-kissed",American:"Burgers, BBQ & comfort classics",French:"Bistro favorites & elevated bites",Vietnamese:"Pho, banh mi & bright flavors",Greek:"Mezze, grilled meats & tzatziki",Spanish:"Tapas, paella & sangria",Ethiopian:"Injera platters & spiced stews",Lebanese:"Hummus, grilled meats & fattoush",Turkish:"Kebabs, mezes & baklava",Brazilian:"Churrasco, feijoada & açaí",Moroccan:"Tagines, couscous & warm spices",Caribbean:"Jerk, plantains & tropical flair",Filipino:"Adobo, sinigang & lechon",Taiwanese:"Beef noodle soup & scallion pancakes",Cajun:"Gumbo, jambalaya & crawfish",German:"Sausages, pretzels & hearty mains",Peruvian:"Ceviche, lomo saltado & aji",
+  "Boba shop":"Pearls, milk tea & endless combos","Coffee café":"Espresso pulls & cozy seats","Juice bar":"Cold-pressed & fresh-squeezed","Smoothie spot":"Blended fruits & protein","Tea house":"Loose leaf & calming vibes","Matcha bar":"Ceremonial grade & creative blends","Korean café":"Aesthetic drinks & desserts","Dessert café":"Waffles, cakes & sweet drinks","Milk tea spot":"Creamy tea in every flavor","Açaí bar":"Thick bowls & fresh toppings","Fresh juice stand":"Squeezed to order","Bubble waffle café":"Crispy egg waffles & soft serve","Cheese tea shop":"Savory foam meets sweet tea","Taro place":"Purple and dreamy","Bar & pub":"Cold drafts & chill nights","Craft cocktail bar":"Creative sips & dim lighting","Wine bar":"Natural wines & small plates","Rooftop bar":"Views & elevated cocktails",
+  Ramen:"Rich broth, springy noodles & toppings",Burger:"Juicy patty, melty cheese & fries",Pizza:"Crispy crust & gooey mozzarella",Sushi:"Fresh fish & seasoned rice",Tacos:"Soft tortillas, bold fillings & salsa",Pasta:"Al dente noodles in any sauce",Bibimbap:"Rice bowl with veggies, egg & gochujang",Pho:"Aromatic broth with noodles & herbs","BBQ ribs":"Slow-smoked fall-off-the-bone","Grilled salmon":"Flaky, buttery & simply done",Dumplings:"Steamed or fried pillows of joy",Paella:"Saffron rice with seafood & chorizo",Shakshuka:"Eggs poached in spiced tomato sauce","Banh mi":"Crusty baguette with pickled veg","Falafel wrap":"Crispy falafel in flatbread & tahini",Lasagna:"Pasta, meat sauce & béchamel","Butter chicken":"Creamy tomato curry with naan",Udon:"Thick chewy noodles in dashi broth",Chili:"Slow-cooked beef with beans & spice","Mac & cheese":"Creamy pasta smothered in cheese",Ceviche:"Fresh citrus-cured fish with heat",Gyros:"Rotisserie meat in warm pita",Congee:"Silky rice porridge topped your way","Jerk chicken":"Smoky, spicy Jamaican chicken",Schnitzel:"Crispy breaded cutlet with lemon","Fish & chips":"Golden battered fish & chips","Fried rice":"Wok-tossed with eggs & aromatics",Steak:"Seared to perfection","Pad Thai":"Stir-fried noodles with peanuts","Poke bowl":"Fresh fish, rice & avocado",Curry:"Warming spiced sauce over rice","Katsu curry":"Crispy cutlet on Japanese curry","Birria tacos":"Slow-braised beef in consommé","Smash burger":"Crispy-edged smashed patty",Tonkatsu:"Deep-fried pork cutlet",Gumbo:"Rich Cajun stew over rice",
+  "Brown sugar boba":"Caramel swirls & tiger stripes","Taro milk tea":"Purple & earthy sweet","Matcha latte":"Ceremonial grade meets steamed milk","Mango smoothie":"Tropical & refreshing","Strawberry açaí":"Pink, bright & energizing","Iced americano":"Bold espresso over ice","Thai tea":"Creamy orange & aromatic spice","Fruit punch":"Sweet & tangy","Dirty chai":"Spiced chai meets espresso","Oat milk latte":"Creamy & dairy-free","Cheese foam tea":"Sweet tea with savory cloud","Coconut water":"Natural & hydrating","Lychee soda":"Floral & effervescent","Watermelon juice":"Summer in a cup",Mojito:"Mint, lime & white rum","Aperol spritz":"Bitter orange & bubbly","Craft beer":"Hoppy, malty & local","Espresso tonic":"Bitter meets bubbly","Passion fruit tea":"Tropical & tangy","Hojicha latte":"Roasted green tea warmth",
+  "Fried chicken":"Crispy golden comfort","Instant noodles":"Quick fix","Grilled cheese":"Gooey & golden brown",Tteokbokki:"Chewy rice cakes in spicy sauce","Corn dog":"Crispy battered hot dog",Quesadilla:"Melted cheese in a crispy tortilla","Cup noodles":"Midnight snack classic","Leftover pizza":"Always hits different at 2am",Dakgalbi:"Spicy stir-fried Korean chicken","Hot pot":"Bubbling broth shared together","Bao buns":"Fluffy steamed pillows"
+};
+
+const MT_LABELS={lunch:"☀️ Lunch",dinner:"🌙 Dinner",drinks:"🧋 Drinks",latenight:"🌃 Late Night"};
+const ICON_POOL=["🍕","🍜","🌮","🍣","🍔","🍛","🥗","🍱","🫕","🍝","🥩","🍖","🥟","🍺","🧋","☕","🍹","🥤","🍵","🌙","⭐","📍","❤️","🔥","💎","🏆","🎯","🏠","🌟","🎉","🍽️","🧆","🫙","🥘","🫔","🧁"];
+const HUNGER_EMOJI=["🥗","😋","🍔","🤤"];
+
+function suggestIcon(name){
+  const n=name.toLowerCase();
+  if(/boba|bubble|tea|drink/.test(n))return'🧋';
+  if(/coffee|cafe|café/.test(n))return'☕';
+  if(/bar|pub|beer|cocktail/.test(n))return'🍺';
+  if(/pizza/.test(n))return'🍕';
+  if(/sushi|japanese|ramen/.test(n))return'🍣';
+  if(/burger|bbq|grill/.test(n))return'🍔';
+  if(/thai|noodle|pad/.test(n))return'🍜';
+  if(/taco|mexican/.test(n))return'🌮';
+  if(/korean|kbbq/.test(n))return'🍖';
+  if(/healthy|salad|vegan|veggie/.test(n))return'🥗';
+  if(/late|night|midnight/.test(n))return'🌙';
+  if(/uiuc|campus|champaign|cu/.test(n))return'🎯';
+  if(/fav|love|favorite/.test(n))return'❤️';
+  if(/fancy|fine|premium/.test(n))return'💎';
+  if(/spot|place|go-to/.test(n))return'📍';
+  if(/home|house/.test(n))return'🏠';
+  if(/hot|spicy|fire/.test(n))return'🔥';
+  return'📂';
+}
+
+/* ══ STATE ══ */
+let mode="cuisine",mealType="dinner",hunger=1,numOptions=3,listNumOptions=3,activeMoods=[];
+let currentPool=[],currentSpinPicks=[],currentResult=null;
+let history=[],favorites=[],savedLists={},chipsByType={lunch:[],dinner:[],drinks:[],latenight:[]},savedSpots=[];
+let restaurantChips=[];  // alias for current meal type's chips
+let vetoedItems=new Set(),vetoPool=[];
+let stats={spins:0,picks:{},lastDate:null,streak:0};
+let editingListKey=null,editingListItems=[],editingListIcon='📂',editingListTag='dinner';
+let newListIcon='📂';
+let ioSelectedOpts=new Set(['eat','home','delivery','prep']);
+let spinCancelled=false;
+let spinSource='spin'; // 'spin' or 'list'
+let confirmCb=null;
+
+try{history=JSON.parse(localStorage.getItem('mRH')||'[]');}catch(e){}
+try{favorites=JSON.parse(localStorage.getItem('mRF')||'[]');}catch(e){}
+try{savedLists=JSON.parse(localStorage.getItem('mRL')||'{}');}catch(e){}
+try{savedSpots=JSON.parse(localStorage.getItem('mRS2')||'[]');}catch(e){}
+try{stats=JSON.parse(localStorage.getItem('mRST')||JSON.stringify(stats));}catch(e){}
+try{chipsByType=JSON.parse(localStorage.getItem('mRCT')||JSON.stringify(chipsByType));}catch(e){}
+restaurantChips=chipsByType[mealType]||[];
+
+// Migrate savedSpots from old format (array of strings) to new format (array of {name,tag})
+savedSpots=savedSpots.map(s=>typeof s==='string'?{name:s,tag:'dinner'}:s);
+// Migrate savedLists
+Object.keys(savedLists).forEach(k=>{
+  const v=savedLists[k];
+  if(Array.isArray(v)) savedLists[k]={items:v,icon:suggestIcon(k),tag:'dinner'};
+  else if(!v.tag) savedLists[k].tag='dinner';
+});
+persist();
+
+function persist(){
+  try{localStorage.setItem('mRH',JSON.stringify(history));
+      localStorage.setItem('mRF',JSON.stringify(favorites));
+      localStorage.setItem('mRL',JSON.stringify(savedLists));
+      localStorage.setItem('mRS2',JSON.stringify(savedSpots));
+      localStorage.setItem('mRST',JSON.stringify(stats));
+      chipsByType[mealType]=restaurantChips;
+      localStorage.setItem('mRCT',JSON.stringify(chipsByType));}catch(e){}
+}
+
+/* ══ ONBOARDING ══ */
+function obChoose(tab){document.getElementById('obOverlay').classList.add('hidden');switchTab(tab);}
+
+/* ══ MODAL HELPER ══ */
+function showModal(title,sub,buttons){
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalSub').textContent=sub;
+  const act=document.getElementById('modalActions');
+  act.innerHTML=buttons.map((b,i)=>`<button class="modal-btn ${b.cls||''}" onclick="modalClick(${i})">${b.label}</button>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  confirmCb=buttons.map(b=>b.fn);
+}
+function modalClick(i){document.getElementById('modalOverlay').classList.remove('open');if(confirmCb&&confirmCb[i])confirmCb[i]();}
+window.addEventListener('click',e=>{if(e.target===document.getElementById('modalOverlay'))document.getElementById('modalOverlay').classList.remove('open');});
+
+/* ══ TAB ══ */
+function switchTab(tab){
+  ['spin','list','inout'].forEach(t=>{
+    document.getElementById('tab'+cap(t)).classList.toggle('active',t===tab);
+    document.getElementById('panel'+cap(t)).classList.toggle('active',t===tab);
+  });
+  if(tab==='list') mode='custom';
+  else if(tab==='spin') mode=document.querySelector('.sub-mode-btn.active')?.dataset.m||'cuisine';
+  // Only reset arena/result when switching away from a spin context
+  // (don't clear results when user just switches tabs to look around)
+}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+/* ══ MEAL TYPE ══ */
+function setMealType(mt){
+  // Save current chips back to old meal type
+  chipsByType[mealType]=restaurantChips;
+  mealType=mt;
+  // Restore chips for new meal type
+  restaurantChips=chipsByType[mealType]||[];
+  document.querySelectorAll('.mt-btn').forEach(b=>b.classList.toggle('active',b.dataset.mt===mt));
+  activeMoods=[];
+  renderMoodGrid();
+  spotsCurrentPage=0;
+  renderSavedSpots();
+  renderSavedLists();
+  renderChips();
+}
+function renderMoodGrid(){
+  const cfg=MEAL_TYPES[mealType].moods;
+  document.getElementById('moodGrid').innerHTML=Object.entries(cfg).map(([k,v])=>
+    `<button class="mood-btn${activeMoods.includes(k)?' active':''}" data-mood="${k}" onclick="toggleMood('${k}')">${v.label}</button>`
+  ).join('');
+}
+function toggleMood(m){
+  activeMoods.includes(m)?activeMoods=activeMoods.filter(x=>x!==m):activeMoods.length<2&&activeMoods.push(m);
+  renderMoodGrid();
+}
+renderMoodGrid();
+
+/* ══ FOOD FLOATERS ══ */
+const FOOD_SVG=[
+  `<svg width="52" height="52" viewBox="0 0 58 58"><ellipse cx="29" cy="48" rx="21" ry="9" fill="#FFD600" stroke="#E8960A" stroke-width="2"/><ellipse cx="29" cy="31" rx="21" ry="9" fill="#FFF8E8" stroke="#E8960A" stroke-width="2"/><path d="M14 28 Q19 23 24 28 Q29 23 34 28 Q39 23 44 28" stroke="#E8960A" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="22" cy="27" r="4" fill="#FF4D8D"/><circle cx="37" cy="26" r="3.5" fill="#00C9A7"/></svg>`,
+  `<svg width="52" height="52" viewBox="0 0 58 58"><ellipse cx="29" cy="17" rx="18" ry="8" fill="#FFB830"/><rect x="11" y="24" width="36" height="11" rx="3" fill="#FFE0A0"/><rect x="11" y="29" width="36" height="5" rx="2" fill="#FF4D8D"/><ellipse cx="29" cy="41" rx="18" ry="7" fill="#E8A040"/></svg>`,
+  `<svg width="52" height="52" viewBox="0 0 58 58"><path d="M29 8 L8 50 L50 50 Z" fill="#FFD600"/><path d="M29 12 L12 48 L46 48 Z" fill="#FF4D8D"/><circle cx="24" cy="33" r="3.5" fill="#C02060"/><circle cx="36" cy="39" r="3" fill="#C02060"/><circle cx="29" cy="24" r="3" fill="#C02060"/></svg>`,
+  `<svg width="52" height="52" viewBox="0 0 58 58"><ellipse cx="29" cy="41" rx="21" ry="8" fill="#C9B8FF"/><ellipse cx="29" cy="33" rx="21" ry="8" fill="#F0EBFF"/><ellipse cx="29" cy="32" rx="17" ry="6" fill="white"/><circle cx="22" cy="30" r="2" fill="#EDE7FF"/><circle cx="29" cy="28" r="2" fill="#EDE7FF"/><circle cx="36" cy="30" r="2" fill="#EDE7FF"/></svg>`,
+  `<svg width="52" height="52" viewBox="0 0 58 58"><path d="M10 38 Q29 8 48 38" stroke="#FFD600" stroke-width="11" stroke-linecap="round" fill="none"/><path d="M13 36 Q29 12 45 36" fill="#FFE766"/><ellipse cx="22" cy="30" rx="4" ry="3" fill="#FF4D8D"/><ellipse cx="33" cy="26" rx="3.5" ry="3" fill="#00C9A7"/></svg>`,
+  `<svg width="52" height="52" viewBox="0 0 58 58"><ellipse cx="29" cy="37" rx="17" ry="9" fill="#E0F8FF" stroke="#80D8FF" stroke-width="2"/><rect x="24" y="12" width="10" height="26" rx="5" fill="#80D8FF"/><circle cx="29" cy="38" r="5" fill="#B39DFF"/><circle cx="29" cy="38" r="3" fill="#7C4DFF"/></svg>`
+];
+const FP=[{left:'3%',top:'10%'},{left:'83%',top:'5%'},{left:'1%',top:'55%'},{left:'86%',top:'50%'},{left:'8%',top:'80%'},{left:'79%',top:'78%'}];
+FOOD_SVG.forEach((svg,i)=>{
+  const d=document.createElement('div');d.className='fc';const p=FP[i];
+  const r0=(Math.random()-.5)*14,r1=(Math.random()-.5)*9,r2=(Math.random()-.5)*11;
+  d.style.cssText=`left:${p.left};top:${p.top};--r0:${r0}deg;--r1:${r1}deg;--r2:${r2}deg;animation-duration:${4+Math.random()*4}s;animation-delay:${Math.random()*3}s;`;
+  d.innerHTML=svg;document.getElementById('foodLayer').appendChild(d);
+});
+
+/* ══ SHOOTING STARS ══ */
+function launchShootingStar(){
+  const layer=document.getElementById('starsLayer');
+  const star=document.createElement('div');star.className='shooting-star';
+  const startX=Math.random()*window.innerWidth*0.6;
+  const startY=Math.random()*window.innerHeight*0.5;
+  const angle=-15-Math.random()*20;
+  const len=120+Math.random()*200;
+  const dur=0.8+Math.random()*0.6;
+  const tx=Math.cos(angle*Math.PI/180)*500+'px';
+  star.style.cssText=`left:${startX}px;top:${startY}px;width:${len}px;transform:rotate(${angle}deg);--dur:${dur}s;--delay:0s;--tx:${tx};`;
+  star.classList.add('go');
+  layer.appendChild(star);
+  setTimeout(()=>star.remove(),(dur+0.5)*1000);
+}
+setInterval(()=>launchShootingStar(),3500+Math.random()*4000);
+setTimeout(()=>launchShootingStar(),1500);
+
+/* ══ TITLE WAVE ══ */
+function triggerLetterWave(){
+  const h1=document.getElementById('mainTitle');
+  const words=h1.querySelectorAll('.word');
+  // Replace each word's content with letter spans temporarily
+  words.forEach((w,wi)=>{
+    const txt=w.textContent;
+    w.innerHTML=[...txt].map((ch,ci)=>`<span class="letter" style="animation-delay:${(wi*txt.length+ci)*0.05}s">${ch}</span>`).join('');
+  });
+  h1.classList.add('wave');
+  setTimeout(()=>{
+    h1.classList.remove('wave');
+    words.forEach(w=>{const txt=[...w.querySelectorAll('.letter')].map(s=>s.textContent).join('');w.textContent=txt;});
+  },1200);
+}
+// Trigger wave every 4s after initial load
+setTimeout(()=>{
+  triggerLetterWave();
+  setInterval(triggerLetterWave,4000);
+},2000);
+
+/* ══ CHEF ══ */
+function chefReact(state){
+  const el=document.getElementById('chefEl');
+  el.classList.remove('bounce','wiggle','celebrate');void el.offsetWidth;
+  el.classList.add(state==='thinking'?'wiggle':state==='excited'?'celebrate':'bounce');
+  const ce=document.getElementById('ce'),cm=document.getElementById('cm');
+  if(state==='excited'){ce.innerHTML=`<text x="31" y="39" font-size="12" text-anchor="middle" fill="#FFD600">★</text><text x="49" y="39" font-size="12" text-anchor="middle" fill="#FFD600">★</text>`;cm.setAttribute('d','M30 43 Q40 51 50 43');}
+  else if(state==='thinking'){ce.innerHTML=`<path d="M30 36 Q32 33 34 36" stroke="#2D1B69" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M42 36 Q44 33 46 36" stroke="#2D1B69" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;cm.setAttribute('d','M33 44 Q40 42 47 44');}
+  else{ce.innerHTML=`<path d="M32 35 Q34 32 36 35" stroke="#2D1B69" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M44 35 Q46 32 48 35" stroke="#2D1B69" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;cm.setAttribute('d','M34 43 Q40 48 46 43');}
+}
+
+/* ══ RIPPLE ══ */
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.rw');if(!btn)return;
+  const r=document.createElement('span');r.className='ripple';
+  const rect=btn.getBoundingClientRect();
+  r.style.left=(e.clientX-rect.left)+'px';r.style.top=(e.clientY-rect.top)+'px';
+  btn.appendChild(r);setTimeout(()=>r.remove(),600);
+});
+
+/* ══ SLIDERS ══ */
+function updateSlider(el,valId,map){
+  const v=parseInt(el.value);if(valId==='hungerVal')hunger=v;
+  document.getElementById(valId).textContent=map[v];
+  el.style.setProperty('--pct',((v-el.min)/(el.max-el.min)*100).toFixed(0)+'%');
+}
+function updateOptSlider(el,valId){
+  const v=parseInt(el.value);
+  if(valId==='optVal') numOptions=v;
+  else listNumOptions=v;
+  document.getElementById(valId).textContent=v;
+  el.style.setProperty('--pct',((v-el.min)/(el.max-el.min)*100).toFixed(0)+'%');
+}
+document.getElementById('hungerSlider').style.setProperty('--pct','25%');
+document.getElementById('optSlider').style.setProperty('--pct','50%');
+document.getElementById('listOptSlider').style.setProperty('--pct','22%'); // 3/10
+
+/* ══ SUB MODE ══ */
+document.querySelectorAll('.sub-mode-btn').forEach(b=>b.onclick=()=>{
+  mode=b.dataset.m;
+  document.querySelectorAll('.sub-mode-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+});
+
+/* ══ POOL ══ */
+function getFullPool(){
+  if(mode==='custom')return restaurantChips.length?[...restaurantChips]:null;
+  const mt=MEAL_TYPES[mealType];
+  let base=[...mt[mode==='cuisine'?'cuisine':'dish']];
+  if(activeMoods.length){
+    const cfg=mt.moods;
+    let filtered=base;
+    activeMoods.forEach(m=>{if(cfg[m]){const mf=cfg[m][mode==='cuisine'?'cuisine':'dish']||[];filtered=filtered.filter(x=>mf.includes(x));}});
+    if(filtered.length>=2)base=filtered;
+  }
+  return base;
+}
+function pickN(arr,n){return [...arr].sort(()=>Math.random()-.5).slice(0,Math.min(n,arr.length));}
+
+/* ══ REEL ══ */
+function buildReelItems(pool,winner,count){
+  const items=[];let last=null;
+  for(let i=0;i<count;i++){
+    let pick,t=0;
+    do{pick=pool[Math.floor(Math.random()*pool.length)];t++;}
+    while(pick===last&&pool.length>1&&t<20);
+    items.push(pick);last=pick;
+  }
+  if(items.length&&items[items.length-1]===winner&&pool.length>1){
+    let s,t=0;do{s=pool[Math.floor(Math.random()*pool.length)];t++;}while(s===winner&&t<20);
+    items.push(s);last=s;
+  }
+  items.push(winner);
+  // non-winner padding after
+  let after,t2=0;
+  do{after=pool[Math.floor(Math.random()*pool.length)];t2++;}while(after===winner&&pool.length>1&&t2<20);
+  items.push(after);
+  return items;
+}
+
+/* ══ SPOT RENAME ══ */
+let renamingSpot=null;
+function openSpotRename(name){
+  renamingSpot=name;
+  document.getElementById('spotRenameInp').value=name;
+  document.getElementById('spotRenameOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('spotRenameInp').select(),50);
+}
+function closeSpotRename(){document.getElementById('spotRenameOverlay').classList.remove('open');renamingSpot=null;}
+function saveSpotRename(){
+  const newName=document.getElementById('spotRenameInp').value.trim();
+  if(!newName||!renamingSpot)return closeSpotRename();
+  const spot=savedSpots.find(s=>s.name===renamingSpot);
+  if(spot){
+    const idx=restaurantChips.indexOf(renamingSpot);
+    if(idx>=0)restaurantChips[idx]=newName;
+    spot.name=newName;
+    // Update any savedLists that contain this name
+    Object.values(savedLists).forEach(list=>{
+      const li=list.items||list;
+      const i=li.indexOf(renamingSpot);if(i>=0)li[i]=newName;
+    });
+    persist();renderSavedSpots();renderChips();
+  }
+  closeSpotRename();
+}
+
+/* ══ EDIT INDIVIDUAL CHIP IN WORKING LIST ══ */
+function editChipInline(name){
+  const newName=prompt('Rename "'+name+'":', name);
+  if(!newName||!newName.trim()||newName.trim()===name)return;
+  const nn=newName.trim();
+  const idx=restaurantChips.indexOf(name);
+  if(idx>=0)restaurantChips[idx]=nn;
+  // Update savedSpots if starred
+  const spot=savedSpots.find(s=>s.name===name);
+  if(spot){spot.name=nn;}
+  // Update any savedLists that contain this name
+  Object.values(savedLists).forEach(list=>{
+    const li=list.items||list;
+    const i=li.indexOf(name);if(i>=0)li[i]=nn;
+  });
+  persist();renderSavedSpots();renderChips();
+}
+
+
+function starChip(name){
+  const existing=savedSpots.find(s=>s.name===name);
+  if(existing){savedSpots=savedSpots.filter(s=>s.name!==name);}
+  else{savedSpots.push({name,tag:mealType});}
+  persist();renderSavedSpots();renderChips();
+}
+function loadSavedSpot(name){
+  if(!restaurantChips.includes(name)){restaurantChips.push(name);renderChips();}
+}
+function deleteSavedSpot(name){
+  savedSpots=savedSpots.filter(s=>s.name!==name);persist();renderSavedSpots();renderChips();
+}
+/* ══ SAVED SPOTS (PAGINATED) ══ */
+let spotsCurrentPage=0;
+const SPOTS_PER_PAGE=6; // max pills per page
+
+function renderSavedSpots(){
+  const track=document.getElementById('spotsTrack');
+  const badge=document.getElementById('spotsCountBadge');
+  const pageNav=document.getElementById('spotsPageNav');
+  const pageDot=document.getElementById('spotsPageDot');
+  const prevBtn=document.getElementById('spotsPrev');
+  const nextBtn=document.getElementById('spotsNext');
+  const filtered=savedSpots.filter(s=>s.tag===mealType);
+
+  if(!filtered.length){
+    track.innerHTML='<span class="spots-empty-hint">No spots saved for this meal type yet</span>';
+    badge.style.display='none';pageNav.style.display='none';
+    track.style.transform='';
+    return;
+  }
+
+  badge.style.display='';badge.textContent=filtered.length;
+
+  // Build pages: group spots so each page fits without overflow
+  // Simple: SPOTS_PER_PAGE per page
+  const totalPages=Math.ceil(filtered.length/SPOTS_PER_PAGE);
+  spotsCurrentPage=Math.min(spotsCurrentPage,totalPages-1);
+
+  // Render ALL spots in the track, pages slide via transform
+  track.innerHTML=filtered.map(s=>`<div class="spot-pill" onclick="loadSavedSpot('${esc(s.name)}')">⭐ ${s.name}<span class="sp-edit" onclick="event.stopPropagation();openSpotRename('${esc(s.name)}')">✏️</span><span class="sp-del" onclick="event.stopPropagation();deleteSavedSpot('${esc(s.name)}')">✕</span></div>`).join('');
+
+  if(totalPages<=1){
+    pageNav.style.display='none';
+    track.style.transform='';
+    return;
+  }
+
+  pageNav.style.display='flex';
+  pageDot.textContent=`${spotsCurrentPage+1} / ${totalPages}`;
+  prevBtn.disabled=spotsCurrentPage===0;
+  nextBtn.disabled=spotsCurrentPage===totalPages-1;
+
+  // Measure and slide to current page
+  applySpotsPage(false);
+}
+
+function applySpotsPage(animate=true){
+  const track=document.getElementById('spotsTrack');
+  const pills=[...track.querySelectorAll('.spot-pill')];
+  const filtered=savedSpots.filter(s=>s.tag===mealType);
+  const totalPages=Math.ceil(filtered.length/SPOTS_PER_PAGE);
+  const pageDot=document.getElementById('spotsPageDot');
+  const prevBtn=document.getElementById('spotsPrev');
+  const nextBtn=document.getElementById('spotsNext');
+  pageDot.textContent=`${spotsCurrentPage+1} / ${totalPages}`;
+  prevBtn.disabled=spotsCurrentPage===0;
+  nextBtn.disabled=spotsCurrentPage===totalPages-1;
+
+  // Hide/show pills for current page, use transform to animate
+  const start=spotsCurrentPage*SPOTS_PER_PAGE;
+  pills.forEach((p,i)=>{
+    p.style.display=(i>=start&&i<start+SPOTS_PER_PAGE)?'':'none';
+  });
+
+  if(!animate){track.style.transition='none';}else{track.style.transition='transform .35s cubic-bezier(.16,1,.3,1)';}
+  // Small pulse effect on page change
+  if(animate){
+    track.style.opacity='0';track.style.transform='translateX(12px)';
+    setTimeout(()=>{track.style.transition='opacity .2s,transform .25s cubic-bezier(.16,1,.3,1)';track.style.opacity='1';track.style.transform='translateX(0)';},30);
+  }else{track.style.transform='';track.style.opacity='1';}
+}
+
+function spotsPage(dir){
+  const filtered=savedSpots.filter(s=>s.tag===mealType);
+  const totalPages=Math.ceil(filtered.length/SPOTS_PER_PAGE);
+  const newPage=spotsCurrentPage+dir;
+  if(newPage<0||newPage>=totalPages)return;
+
+  const track=document.getElementById('spotsTrack');
+  // Slide out
+  track.style.transition='opacity .15s,transform .15s ease-in';
+  track.style.opacity='0';
+  track.style.transform=dir>0?'translateX(-18px)':'translateX(18px)';
+  setTimeout(()=>{
+    spotsCurrentPage=newPage;
+    const pills=[...track.querySelectorAll('.spot-pill')];
+    const start=spotsCurrentPage*SPOTS_PER_PAGE;
+    pills.forEach((p,i)=>{p.style.display=(i>=start&&i<start+SPOTS_PER_PAGE)?'':'none';});
+    // Slide in from opposite side
+    const fromX=dir>0?'18px':'-18px';
+    track.style.transition='none';
+    track.style.transform=`translateX(${fromX})`;
+    track.style.opacity='0';
+    setTimeout(()=>{
+      track.style.transition='opacity .22s,transform .28s cubic-bezier(.16,1,.3,1)';
+      track.style.transform='translateX(0)';
+      track.style.opacity='1';
+      const pageDot=document.getElementById('spotsPageDot');
+      const prevBtn=document.getElementById('spotsPrev');
+      const nextBtn=document.getElementById('spotsNext');
+      const totalPages2=Math.ceil(savedSpots.filter(s=>s.tag===mealType).length/SPOTS_PER_PAGE);
+      pageDot.textContent=`${spotsCurrentPage+1} / ${totalPages2}`;
+      prevBtn.disabled=spotsCurrentPage===0;
+      nextBtn.disabled=spotsCurrentPage===totalPages2-1;
+    },20);
+  },160);
+}
+
+/* ══ CHIPS ══ */
+function chipKey(e){if(e.key==='Enter'){e.preventDefault();addChip();}}
+function addChip(){
+  const v=document.getElementById('chipInp').value.trim();
+  if(!v||restaurantChips.includes(v))return;
+  restaurantChips.push(v);document.getElementById('chipInp').value='';renderChips();
+}
+function removeChip(n){restaurantChips=restaurantChips.filter(c=>c!==n);renderChips();}
+function renderChips(){
+  const area=document.getElementById('chipsArea');
+  if(!restaurantChips.length){
+    area.innerHTML='<span class="chips-empty-hint">Tap a saved spot above, or type to add</span>';
+    document.getElementById('listCountBadge').textContent='0 places';return;
+  }
+  document.getElementById('listCountBadge').textContent=restaurantChips.length+' place'+(restaurantChips.length===1?'':'s');
+  area.innerHTML=restaurantChips.map(c=>{
+    const starred=savedSpots.some(s=>s.name===c);
+    return `<div class="r-chip"><span>${c}</span><button class="edit-chip-inline" onclick="editChipInline('${esc(c)}')" title="Rename">✏️</button><button class="star-btn" onclick="starChip('${esc(c)}')">${starred?'⭐':'☆'}</button><button class="rm-btn" onclick="removeChip('${esc(c)}')">✕</button></div>`;
+  }).join('');
+}
+function esc(s){return s.replace(/'/g,"\\'");}
+
+/* ══ CLEAR LIST ══ */
+function clearListPrompt(){
+  if(!restaurantChips.length)return;
+  const unsaved=restaurantChips.filter(c=>!savedSpots.some(s=>s.name===c));
+  if(unsaved.length){
+    showModal('Clear the list? 🗑️',`${unsaved.length} place(s) aren't saved yet — they'll be gone.`,[
+      {label:'Keep it',cls:'ghost',fn:null},
+      {label:'Clear it',cls:'danger',fn:()=>{restaurantChips=[];renderChips();}}
+    ]);
+  }else{restaurantChips=[];renderChips();}
+}
+
+/* ══ ICON PICKERS ══ */
+function buildIconGrid(containerId,selected,onSelect){
+  document.getElementById(containerId).innerHTML=ICON_POOL.map(ico=>
+    `<div class="icon-opt${ico===selected?' selected':''}" onclick="${onSelect}('${ico}')">${ico}</div>`
+  ).join('');
+}
+function toggleNewIconPicker(){
+  const p=document.getElementById('newListIconPicker');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')) buildIconGrid('newListIconPicker',newListIcon,'selectNewIcon');
+}
+window.selectNewIcon=function(ico){
+  newListIcon=ico;document.getElementById('newListIconPreview').textContent=ico;
+  document.getElementById('newListIconPicker').classList.remove('open');
+  buildIconGrid('newListIconPicker',ico,'selectNewIcon');
+};
+function toggleEditIconPicker(){
+  const p=document.getElementById('editIconPicker');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')) buildIconGrid('editIconPicker',editingListIcon,'selectEditIcon');
+}
+window.selectEditIcon=function(ico){
+  editingListIcon=ico;document.getElementById('editIconDisplay').textContent=ico;
+  document.getElementById('editIconPicker').classList.remove('open');
+  buildIconGrid('editIconPicker',ico,'selectEditIcon');
+};
+
+/* ══ SAVED LISTS ══ */
+function saveList(){
+  const n=document.getElementById('slName').value.trim();
+  if(!n||!restaurantChips.length)return;
+  const autoIcon=suggestIcon(n);
+  savedLists[n]={items:[...restaurantChips],icon:newListIcon==='📂'?autoIcon:newListIcon,tag:mealType};
+  persist();
+  document.getElementById('slName').value='';
+  newListIcon='📂';document.getElementById('newListIconPreview').textContent='📂';
+  document.getElementById('newListIconPicker').classList.remove('open');
+  renderSavedLists();
+  const btn=document.querySelector('.sl-save');
+  btn.textContent='✓ Saved!';btn.style.background='var(--mint)';btn.style.color='#fff';
+  setTimeout(()=>{btn.textContent='💾 Save';btn.style.background='';btn.style.color='';},1800);
+}
+
+function loadSavedList(key){
+  const entry=savedLists[key];if(!entry)return;
+  const items=entry.items||entry;
+  if(restaurantChips.length){
+    showModal(`Load "${key}"?`,'What would you like to do with your current list?',[
+      {label:'Replace',cls:'danger',fn:()=>{restaurantChips=[...items];renderChips();}},
+      {label:'Add to list',cls:'secondary',fn:()=>{items.forEach(i=>{if(!restaurantChips.includes(i))restaurantChips.push(i);});renderChips();}},
+      {label:'Cancel',cls:'ghost',fn:null}
+    ]);
+  }else{restaurantChips=[...items];renderChips();}
+}
+
+function openEditList(key){
+  editingListKey=key;
+  const entry=savedLists[key];
+  editingListItems=[...(entry.items||entry)];
+  editingListIcon=entry.icon||suggestIcon(key);
+  editingListTag=entry.tag||'dinner';
+  document.getElementById('editTitle').textContent='Edit "'+key+'"';
+  document.getElementById('editIconDisplay').textContent=editingListIcon;
+  document.getElementById('editNameInp').value=key;
+  document.getElementById('editIconPicker').classList.remove('open');
+  // Tag buttons
+  document.getElementById('editTagRow').innerHTML=Object.entries(MT_LABELS).map(([k,v])=>
+    `<button class="edit-tag-btn${editingListTag===k?' active':''}" onclick="setEditTag('${k}')">${v}</button>`
+  ).join('');
+  renderEditChips();
+  document.getElementById('editOverlay').classList.add('open');
+}
+window.setEditTag=function(t){
+  editingListTag=t;
+  document.querySelectorAll('.edit-tag-btn').forEach(b=>b.classList.toggle('active',b.textContent===MT_LABELS[t]||b.onclick.toString().includes(`'${t}'`)));
+  document.getElementById('editTagRow').innerHTML=Object.entries(MT_LABELS).map(([k,v])=>
+    `<button class="edit-tag-btn${editingListTag===k?' active':''}" onclick="setEditTag('${k}')">${v}</button>`
+  ).join('');
+};
+function closeEditOut(e){if(e.target===document.getElementById('editOverlay'))closeEdit();}
+function closeEdit(){document.getElementById('editOverlay').classList.remove('open');}
+function renderEditChips(){
+  document.getElementById('editChipsArea').innerHTML=editingListItems.map(c=>
+    `<div class="edit-chip"><span>${c}</span><button class="edit-chip-rm" onclick="editRemoveItem('${esc(c)}')">✕</button></div>`
+  ).join('')||'<span style="font-size:12px;color:var(--text3)">No items yet</span>';
+}
+function editRemoveItem(n){editingListItems=editingListItems.filter(x=>x!==n);renderEditChips();}
+function editAddKey(e){if(e.key==='Enter'){e.preventDefault();editAddItem();}}
+function editAddItem(){
+  const v=document.getElementById('editAddInp').value.trim();
+  if(!v||editingListItems.includes(v))return;
+  editingListItems.push(v);document.getElementById('editAddInp').value='';renderEditChips();
+}
+function saveEditList(){
+  const newName=document.getElementById('editNameInp').value.trim()||editingListKey;
+  if(newName!==editingListKey) delete savedLists[editingListKey];
+  savedLists[newName]={items:[...editingListItems],icon:editingListIcon,tag:editingListTag};
+  persist();closeEdit();renderSavedLists();
+}
+function deleteEditList(){
+  showModal('Delete this list?','This can\'t be undone.',[
+    {label:'Cancel',cls:'ghost',fn:null},
+    {label:'Delete',cls:'danger',fn:()=>{delete savedLists[editingListKey];persist();closeEdit();renderSavedLists();}}
+  ]);
+}
+
+function renderSavedLists(){
+  const el=document.getElementById('savedListCards');
+  const keys=Object.keys(savedLists).filter(k=>(savedLists[k].tag||'dinner')===mealType);
+  if(!keys.length){el.innerHTML='<span class="no-lists-hint">No lists saved for this meal type yet</span>';return;}
+  el.innerHTML=keys.map(k=>{
+    const entry=savedLists[k];
+    const ico=entry.icon||'📂';
+    const cnt=(entry.items||[]).length;
+    const tagLbl=MT_LABELS[entry.tag||'dinner']||'';
+    return `<div class="sl-card">
+      <span class="sl-card-ico">${ico}</span>
+      <div class="sl-card-info">
+        <div class="sl-card-name">${k}</div>
+        <div class="sl-card-meta">${cnt} place${cnt===1?'':'s'}<span class="sl-card-tag tag-${entry.tag||'dinner'}">${tagLbl}</span></div>
+      </div>
+      <div class="sl-card-actions">
+        <button class="sl-card-load" onclick="loadSavedList('${esc(k)}')">Load</button>
+        <button class="sl-card-edit" onclick="openEditList('${esc(k)}')">✏️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+renderSavedLists();renderSavedSpots();
+
+/* ══ IN/OUT ══ */
+function toggleIOOpt(el){
+  const k=el.dataset.io;
+  if(ioSelectedOpts.has(k)&&ioSelectedOpts.size>1)ioSelectedOpts.delete(k);
+  else ioSelectedOpts.add(k);
+  document.querySelectorAll('.inout-opt').forEach(o=>{
+    o.classList.remove('sel-eat','sel-home','sel-delivery','sel-prep');
+    if(ioSelectedOpts.has(o.dataset.io))o.classList.add('sel-'+o.dataset.io);
+  });
+}
+const IO_DATA={eat:{ico:'🍽️',name:'Eat out',sub:'Time to go out and enjoy!'},home:{ico:'👨‍🍳',name:'Cook at home',sub:"Chef mode activated. Let's get cooking."},delivery:{ico:'🛵',name:'Order delivery',sub:"Couch locked. Someone's coming to you."},prep:{ico:'📦',name:'Meal prep',sub:'Future you will be very grateful.'}};
+function doInOut(){
+  const opts=[...ioSelectedOpts];if(!opts.length)return;
+  const pick=opts[Math.floor(Math.random()*opts.length)];const d=IO_DATA[pick];
+  const res=document.getElementById('inoutResult');res.classList.remove('show');void res.offsetWidth;
+  document.getElementById('inoutIco').textContent=d.ico;
+  document.getElementById('inoutName').textContent=d.name;
+  document.getElementById('inoutSub').textContent=d.sub;
+  res.classList.add('show');chefReact('excited');launchConfetti();
+}
+
+/* ══ VETO ══ */
+function openVetoMode(){const pool=getFullPool();if(!pool||!pool.length)return;_openVeto(pool);}
+function openVetoModeList(){if(!restaurantChips.length)return;_openVeto([...restaurantChips]);}
+function _openVeto(pool){
+  vetoPool=[...pool];vetoedItems=new Set();
+  document.getElementById('vetoChips').innerHTML=vetoPool.map(item=>
+    `<div class="veto-chip" data-item="${item}" onclick="toggleVeto(this)">${item}</div>`
+  ).join('');
+  document.getElementById('vetoOverlay').classList.add('open');
+}
+function toggleVeto(el){el.classList.toggle('vetoed');vetoedItems.has(el.dataset.item)?vetoedItems.delete(el.dataset.item):vetoedItems.add(el.dataset.item);}
+function closeVeto(){document.getElementById('vetoOverlay').classList.remove('open');}
+function closeVetoOut(e){if(e.target===document.getElementById('vetoOverlay'))closeVeto();}
+function vetoAndSpin(){
+  const filtered=vetoPool.filter(x=>!vetoedItems.has(x));
+  if(!filtered.length){alert('You vetoed everything!');return;}
+  closeVeto();currentPool=filtered;currentSpinPicks=pickN(filtered,numOptions);startSpinSequence();
+}
+
+/* ══ CANCEL SPIN ══ */
+function cancelSpin(){
+  spinCancelled=true;
+  document.getElementById('slotOverlay').classList.remove('open');
+  document.getElementById('spinBtn').disabled=false;
+  document.getElementById('listSpinBtn').disabled=false;
+  document.getElementById('spinBtn').textContent='🎲 Spin';
+}
+
+/* ══ SPIN ══ */
+function doSpin(){
+  const pool=getFullPool();if(!pool||!pool.length)return;
+  spinSource='spin';
+  currentPool=pool;currentSpinPicks=pickN(pool,numOptions);
+  document.getElementById('resultSec').classList.remove('open');
+  document.getElementById('arena').classList.remove('open');
+  startSpinSequence();
+}
+function doListSpin(){
+  if(!restaurantChips.length){document.getElementById('chipInp').focus();return;}
+  spinSource='list';
+  mode='custom';currentPool=[...restaurantChips];
+  currentSpinPicks=pickN(restaurantChips,listNumOptions);
+  document.getElementById('resultSec').classList.remove('open');
+  document.getElementById('arena').classList.remove('open');
+  startSpinSequence();
+}
+function doLucky(){
+  const mt=MEAL_TYPES[mealType];const all=[...mt.cuisine,...mt.dish];
+  currentPool=all;currentSpinPicks=pickN(all,1);
+  document.getElementById('resultSec').classList.remove('open');
+  document.getElementById('arena').classList.remove('open');
+  document.getElementById('slotCounter').textContent='🍀 LUCKY ROLL!';
+  startSpinSequence(true);
+}
+function startSpinSequence(lucky=false){
+  spinCancelled=false;
+  document.getElementById('spinBtn').disabled=true;
+  document.getElementById('listSpinBtn').disabled=true;
+  document.getElementById('cardsGrid').innerHTML='';
+  chefReact('thinking');if(!lucky)updateStats();
+  spinRound(0,lucky);
+}
+
+function spinRound(idx,lucky=false){
+  if(spinCancelled)return;
+  const ITEM_H=65,windowH=195;
+  const overlay=document.getElementById('slotOverlay');
+  const lbl=document.getElementById('slotLbl');
+  const lever=document.getElementById('lever');
+  const reel=document.getElementById('slotReel');
+  const counter=document.getElementById('slotCounter');
+
+  overlay.classList.add('open');
+  if(!lucky) counter.textContent=currentSpinPicks.length===1?'🎰 Spinning…':`Round ${idx+1} of ${currentSpinPicks.length}`;
+
+  lbl.textContent='';
+  lever.classList.remove('pull');void lever.offsetWidth;lever.classList.add('pull');
+
+  const winner=currentSpinPicks[idx];
+  const items=buildReelItems(currentPool,winner,30);
+
+  reel.innerHTML='';reel.style.transform='translateY(0)';reel.style.transition='none';reel.style.filter='none';
+  items.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='slot-item';
+    if(i===items.length-2)d.classList.add('lit');
+    d.textContent=item;reel.appendChild(d);
+  });
+
+  const winnerIdx=items.length-2;
+  const exactTargetY=winnerIdx*ITEM_H-(windowH-ITEM_H)/2;
+  const duration=3400;const startT=performance.now();
+  function easeOutExpo(t){return t===1?1:1-Math.pow(2,-10*t);}
+
+  function frame(now){
+    if(spinCancelled)return;
+    const t=Math.min((now-startT)/duration,1);
+    const eased=easeOutExpo(t);
+    reel.style.transform=`translateY(-${eased*exactTargetY}px)`;
+    const blur=Math.round((1-eased)*16);reel.style.filter=blur>1?`blur(${blur}px)`:'none';
+    if(t<1){requestAnimationFrame(frame);}
+    else{
+      if(spinCancelled)return;
+      reel.style.transform=`translateY(-${exactTargetY}px)`;reel.style.filter='none';
+      lbl.textContent=winner;
+      overlay.classList.remove('shake');void overlay.offsetWidth;overlay.classList.add('shake');
+      setTimeout(()=>{
+        if(spinCancelled)return;
+        overlay.classList.remove('shake');
+        if(idx+1<currentSpinPicks.length){
+          setTimeout(()=>spinRound(idx+1,lucky),750);
+        }else{
+          setTimeout(()=>{
+            if(spinCancelled)return;
+            overlay.classList.remove('open');
+            dealCards();
+            document.getElementById('spinBtn').disabled=false;
+            document.getElementById('listSpinBtn').disabled=false;
+            document.getElementById('spinBtn').textContent='🔄 Re-spin';
+          },950);
+        }
+      },350);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ══ DEAL CARDS ══ */
+let cardSelectMode=false; // whether cards are in keep/drop select mode
+
+function dealCards(){
+  const arena=document.getElementById('arena');const grid=document.getElementById('cardsGrid');
+  const bb=document.getElementById('battleBtn');const rb=document.getElementById('rematchBtn');
+  const hint=document.getElementById('battleSelectHint');
+  const subRow=document.getElementById('battleSubRow');
+  grid.innerHTML='';arena.classList.add('open');rb.classList.remove('show');
+  cardSelectMode=false;hint.style.display='none';subRow.style.display='none';
+  // reset any lingering winner state
+  document.querySelectorAll('.opt-card.winner-moving,.opt-card.winner-final').forEach(c=>{c.style.cssText='';c.classList.remove('winner-moving','winner-final');});
+  if(currentSpinPicks.length===1){
+    document.getElementById('arenaLbl').textContent='Your fate is sealed ✨';
+    bb.style.display='none';
+    const card=makeCard(currentSpinPicks[0],0);grid.appendChild(card);
+    setTimeout(()=>{card.classList.add('dealt');},30);
+    setTimeout(()=>revealWinner(currentSpinPicks[0]),700);
+  }else{
+    document.getElementById('arenaLbl').textContent=`${currentSpinPicks.length} contenders — battle! ⚡`;
+    bb.style.display='';bb.disabled=false;bb.textContent='⚡ Battle — pick the winner!';
+    currentSpinPicks.forEach((item,i)=>{
+      const card=makeCard(item,i);grid.appendChild(card);
+      setTimeout(()=>card.classList.add('dealt'),i*140+50);
+    });
+    chefReact('thinking');
+    // Show sub-row for select mode after cards dealt
+    setTimeout(()=>{
+      subRow.innerHTML=`<button class="battle-respin-btn" onclick="enterSelectMode()">✋ Keep / drop cards</button><button class="battle-respin-btn" onclick="battleRespinAll()">🎲 Re-spin all</button>`;
+      subRow.style.display='flex';
+    },(currentSpinPicks.length*140+50+300));
+    setTimeout(()=>arena.scrollIntoView({behavior:'smooth',block:'nearest'}),200);
+  }
+}
+function makeCard(item,i){
+  const card=document.createElement('div');card.className='opt-card';
+  card.dataset.name=item;
+  const rot=(Math.random()-.5)*14;card.style.setProperty('--dr',rot+'deg');
+  card.innerHTML=`${item}${SUBS[item]?`<span class="card-sub">${SUBS[item]}</span>`:''}`;
+  card.addEventListener('click',()=>onCardClick(card));
+  return card;
+}
+function onCardClick(card){
+  if(!cardSelectMode)return;
+  if(card.classList.contains('keep-mark')){card.classList.remove('keep-mark');card.classList.add('drop-mark');}
+  else if(card.classList.contains('drop-mark')){card.classList.remove('drop-mark');}
+  else{card.classList.add('keep-mark');}
+}
+function enterSelectMode(){
+  cardSelectMode=true;
+  const hint=document.getElementById('battleSelectHint');
+  const subRow=document.getElementById('battleSubRow');
+  hint.style.display='';
+  // Swap sub-row to confirm/cancel
+  subRow.innerHTML=`<button class="battle-respin-btn" onclick="battleRespinSelected()">🔄 Re-spin dropped</button><button class="battle-respin-btn" onclick="cancelSelectMode()">↩ Cancel</button>`;
+  subRow.style.display='flex';
+  document.getElementById('battleBtn').textContent='⚡ Battle all!';
+  document.querySelectorAll('.opt-card:not(.loser):not(.winner):not(.winner-moving):not(.winner-final)').forEach(c=>c.classList.add('selectable'));
+}
+function cancelSelectMode(){
+  cardSelectMode=false;
+  document.getElementById('battleSelectHint').style.display='none';
+  document.getElementById('battleBtn').textContent='⚡ Battle — pick the winner!';
+  document.querySelectorAll('.opt-card').forEach(c=>{c.classList.remove('selectable','keep-mark','drop-mark');});
+  const subRow=document.getElementById('battleSubRow');
+  subRow.innerHTML=`<button class="battle-respin-btn" onclick="enterSelectMode()">✋ Keep / drop cards</button><button class="battle-respin-btn" onclick="battleRespinAll()">🎲 Re-spin all</button>`;
+}
+
+function battleRespinSelected(){
+  // Keep the "keep-mark" ones, re-spin the rest from the pool
+  const grid=document.getElementById('cardsGrid');
+  const allCards=[...grid.querySelectorAll('.opt-card:not(.loser):not(.winner):not(.winner-moving):not(.winner-final)')];
+  const keepCards=allCards.filter(c=>c.classList.contains('keep-mark'));
+  const dropCards=allCards.filter(c=>!c.classList.contains('keep-mark'));
+  if(!dropCards.length){doBattle();return;}
+  const kept=keepCards.map(c=>c.dataset.name).filter(Boolean);
+  // Re-pick replacements from pool excluding kept
+  const pool=currentPool.filter(x=>!kept.includes(x));
+  const needed=dropCards.length;
+  const replacements=pickN(pool.length?pool:currentPool,needed);
+  currentSpinPicks=[...kept,...replacements];
+  currentPool=currentPool; // keep same pool
+  document.getElementById('resultSec').classList.remove('open');
+  document.getElementById('arena').classList.remove('open');
+  startSpinSequence();
+}
+function battleRespinAll(){
+  document.getElementById('resultSec').classList.remove('open');
+  document.getElementById('arena').classList.remove('open');
+  startSpinSequence();
+}
+
+/* ══ BATTLE ══ */
+function doBattle(){
+  const grid=document.getElementById('cardsGrid');
+  const cards=[...grid.querySelectorAll('.opt-card:not(.loser):not(.winner-moving):not(.winner-final)')];
+  if(!cards.length)return;
+  const btn=document.getElementById('battleBtn');btn.disabled=true;chefReact('thinking');
+  cardSelectMode=false;
+  document.getElementById('battleSelectHint').style.display='none';
+  document.getElementById('battleSubRow').style.display='none';
+  cards.forEach(c=>{c.classList.remove('selectable','keep-mark','drop-mark');c.classList.add('pre-battle');});
+
+  setTimeout(()=>{
+    cards.forEach(c=>c.classList.remove('pre-battle'));
+    const winIdx=Math.floor(Math.random()*cards.length);
+
+    // Stagger loser eliminations
+    const rotDirs=[10,-12,14,-10,16,-8];
+    const fxDirs=['-60px','60px','-40px','40px','0px','0px'];
+    let li=0;
+    cards.forEach((c,i)=>{
+      if(i===winIdx)return;
+      const delay=li*140;
+      const fr=rotDirs[li%rotDirs.length];
+      const fx=fxDirs[li%fxDirs.length];
+      c.style.setProperty('--fr',fr+'deg');
+      c.style.setProperty('--fx',fx);
+      setTimeout(()=>c.classList.add('loser'),delay);
+      li++;
+    });
+
+    const loserAnimEnd=(li-1)*140+600; // last loser done
+
+    // After all losers gone → move winner to center
+    setTimeout(()=>{
+      const wCard=cards[winIdx];
+      const wName=wCard.dataset.name||currentSpinPicks[winIdx];
+      chefReact('excited');
+
+      // Snapshot winner's current position
+      const wRect=wCard.getBoundingClientRect();
+
+      // Fix winner in place as fixed-position clone
+      wCard.style.position='fixed';
+      wCard.style.left=wRect.left+'px';
+      wCard.style.top=wRect.top+'px';
+      wCard.style.width=wRect.width+'px';
+      wCard.style.height=wRect.height+'px';
+      wCard.style.margin='0';
+      wCard.style.zIndex='200';
+      wCard.style.transition='none';
+      wCard.classList.add('winner-moving');
+
+      // Target: center of viewport, bigger
+      const targetW=Math.min(220,window.innerWidth*0.55);
+      const targetH=targetW*0.65;
+      const targetL=(window.innerWidth-targetW)/2;
+      const targetT=(window.innerHeight-targetH)/2;
+
+      // Trigger move on next frame
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        wCard.style.left=targetL+'px';
+        wCard.style.top=targetT+'px';
+        wCard.style.width=targetW+'px';
+        wCard.style.height=targetH+'px';
+        wCard.style.transform='scale(1)';
+        wCard.style.borderColor='var(--yellow)';
+        wCard.style.background='linear-gradient(135deg,var(--yellow-p),#FFF9E0)';
+        wCard.style.boxShadow='0 0 0 5px var(--yellow),0 20px 60px rgba(255,214,0,.7)';
+        wCard.style.fontSize='clamp(18px,5vw,26px)';
+
+        // After travel, do pulse slam + clean up
+        setTimeout(()=>{
+          wCard.classList.add('winner-final');
+          launchConfetti();
+
+          // Hold center for 1.4s, then detach back into grid for reveal
+          setTimeout(()=>{
+            // Reset fixed positioning, restore in grid
+            wCard.style.cssText='';
+            wCard.classList.remove('winner-moving');
+            wCard.classList.add('winner');
+            btn.textContent='⚡ Battle again!';btn.disabled=false;
+            if(history.length>=3)document.getElementById('rematchBtn').classList.add('show');
+            revealWinner(wName);
+          },1500);
+        },580);
+      }));
+    },loserAnimEnd);
+  },900);
+}
+
+function doRematch(){
+  if(history.length<3)return;
+  currentSpinPicks=[...history.slice(0,3)];currentPool=[...history.slice(0,3)];
+  document.getElementById('resultSec').classList.remove('open');dealCards();
+}
+
+/* ══ REVEAL ══ */
+function revealWinner(name){
+  currentResult=name;
+  const rn=document.getElementById('rName');rn.className='r-name';rn.textContent=name;
+  rn.style.animation='none';void rn.offsetWidth;rn.style.animation='resultSlam .6s cubic-bezier(.16,1,.3,1) both';
+  document.getElementById('rSub').textContent=SUBS[name]||'';
+  document.getElementById('resultSec').classList.add('open');
+  const fb=document.getElementById('favBtn');fb.classList.remove('on');fb.textContent='♥ Save';
+  if(favorites.includes(name)){fb.classList.add('on');fb.textContent='♥ Saved!';}
+  // Show re-spin buttons: re-spin these (from current picks) and spin fresh (from full pool)
+  const respinBtn=document.getElementById('respinBtn');
+  const respinAllBtn=document.getElementById('respinAllBtn');
+  if(currentSpinPicks.length>1){
+    respinBtn.style.display='';
+    respinBtn.textContent=`🔄 Re-spin (${currentSpinPicks.length})`;
+  }else{respinBtn.style.display='none';}
+  respinAllBtn.style.display='';
+  respinAllBtn.textContent=spinSource==='list'?'🎲 Spin my list':'🎲 Spin fresh';
+  chefReact('excited');addToHistory(name);launchConfetti();
+  setTimeout(()=>document.getElementById('resultSec').scrollIntoView({behavior:'smooth',block:'nearest'}),200);
+}
+
+/* ══ NOT FEELING IT ══ */
+function notFeelingIt(){
+  const pool=currentPool.length?currentPool:getFullPool();if(!pool||!pool.length)return;
+  let next=currentResult,tries=0;
+  while(next===currentResult&&tries<30){next=pool[Math.floor(Math.random()*pool.length)];tries++;}
+  const rn=document.getElementById('rName');rn.classList.add('out');chefReact('thinking');
+  setTimeout(()=>{
+    currentResult=next;rn.textContent=next;rn.classList.remove('out');rn.classList.add('inn');
+    document.getElementById('rSub').textContent=SUBS[next]||'';
+    const fb=document.getElementById('favBtn');fb.classList.remove('on');fb.textContent='♥ Save';
+    if(favorites.includes(next)){fb.classList.add('on');fb.textContent='♥ Saved!';}
+    addToHistory(next);setTimeout(()=>{rn.classList.remove('inn');chefReact('excited');},400);
+  },320);
+}
+
+/* ══ STATS ══ */
+function updateStats(){
+  stats.spins++;const today=new Date().toDateString();
+  if(stats.lastDate===today){}
+  else if(stats.lastDate===new Date(Date.now()-86400000).toDateString()){stats.streak++;stats.lastDate=today;}
+  else{stats.streak=1;stats.lastDate=today;}
+  persist();renderStats();
+}
+function recordPick(name){stats.picks[name]=(stats.picks[name]||0)+1;persist();renderStats();}
+function renderStats(){
+  document.getElementById('statSpins').textContent=stats.spins;
+  const top=Object.entries(stats.picks).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('statTop').textContent=top?top[0].slice(0,7):'–';
+  document.getElementById('statStreak').textContent=stats.streak+'🔥';
+}
+renderStats();
+
+/* ══ HISTORY / FAVS ══ */
+function addToHistory(n){
+  recordPick(n);history=history.filter(h=>h!==n);history.unshift(n);history=history.slice(0,6);
+  persist();renderHistory();
+}
+function renderHistory(){
+  const s=document.getElementById('histSec');const c=document.getElementById('histChips');
+  if(!history.length){s.classList.remove('has-items');return;}
+  s.classList.add('has-items');
+  c.innerHTML=history.map((h,i)=>`<div class="h-chip ${i>0?'faded':''}">${h}</div>`).join('');
+}
+function toggleFav(){
+  if(!currentResult)return;const fb=document.getElementById('favBtn');
+  if(favorites.includes(currentResult)){favorites=favorites.filter(f=>f!==currentResult);fb.classList.remove('on');fb.textContent='♥ Save';}
+  else{favorites.unshift(currentResult);fb.classList.add('on');fb.textContent='♥ Saved!';}
+  persist();renderFavs();
+}
+function removeFav(n){
+  favorites=favorites.filter(f=>f!==n);persist();
+  if(currentResult===n){document.getElementById('favBtn').classList.remove('on');document.getElementById('favBtn').textContent='♥ Save';}
+  renderFavs();
+}
+function renderFavs(){
+  const s=document.getElementById('favsSec');const c=document.getElementById('favChips');
+  if(!favorites.length){s.classList.remove('has-items');return;}
+  s.classList.add('has-items');
+  c.innerHTML=favorites.map(f=>`<div class="fav-chip"><span>${f}</span><button class="fav-chip-x" onclick="removeFav('${esc(f)}')">✕</button></div>`).join('');
+}
+function shareResult(){
+  if(!currentResult)return;
+  const em=['🍕','🍜','🌮','🍣','🍔','🍛','🧋','☕'];
+  const txt=`🎲 Fate says: ${currentResult}! ${em[Math.floor(Math.random()*em.length)]} (via What's the Vibe?)`;
+  navigator.clipboard.writeText(txt).then(()=>{const b=document.querySelector('.r-btn.share');const o=b.textContent;b.textContent='✓ Copied!';b.style.background='var(--mint-p)';b.style.color='var(--mint)';setTimeout(()=>{b.textContent=o;b.style.background='';b.style.color='';},2000);}).catch(()=>alert(txt));
+}
+let lastListPool=[];
+
+function resetAll(){
+  document.getElementById('resultSec').classList.remove('open');
+  document.getElementById('arena').classList.remove('open');
+  document.getElementById('spinBtn').textContent='🎲 Spin';
+  document.getElementById('spinBtn').disabled=false;
+  document.getElementById('listSpinBtn').disabled=false;
+}
+
+function doRespinFromResult(){
+  // Re-spin only within the current pick set
+  if(!currentSpinPicks||!currentSpinPicks.length)return;
+  const pool=currentSpinPicks;
+  currentPool=pool;
+  currentSpinPicks=pickN(pool,Math.min(pool.length,spinSource==='list'?listNumOptions:numOptions));
+  document.getElementById('resultSec').classList.remove('open');
+  document.getElementById('arena').classList.remove('open');
+  startSpinSequence();
+}
+
+function doRespinAll(){
+  // Re-spin from the full original pool
+  if(spinSource==='list'){doListSpin();}
+  else{doSpin();}
+}
+
+/* ══ FAST DECISION ══ */
+let fdChips=[],coinFlipping=false,coinInterval=null;
+function openFD(){document.getElementById('fdOverlay').classList.add('open');document.getElementById('fdInp').focus();}
+function closeFD(){document.getElementById('fdOverlay').classList.remove('open');stopCoin();}
+function closeFDOut(e){if(e.target===document.getElementById('fdOverlay'))closeFD();}
+function fdKey(e){if(e.key==='Enter'){e.preventDefault();fdAdd();}}
+function fdAdd(){const v=document.getElementById('fdInp').value.trim();if(!v||fdChips.includes(v))return;fdChips.push(v);document.getElementById('fdInp').value='';renderFDChips();}
+function fdRemove(n){fdChips=fdChips.filter(c=>c!==n);renderFDChips();}
+function renderFDChips(){
+  document.getElementById('fdChips').innerHTML=fdChips.map(c=>`<div class="fd-chip"><span>${c}</span><button onclick="fdRemove('${esc(c)}')">✕</button></div>`).join('');
+  document.getElementById('fdGo').disabled=fdChips.length<2;
+  document.getElementById('fdCoin').style.display=fdChips.length===2?'block':'none';
+  document.getElementById('fdSlotWrap').classList.remove('show');
+  document.getElementById('coinArena').classList.remove('show');
+  document.getElementById('fdResult').classList.remove('show');
+}
+function fdReveal(){
+  if(fdChips.length<2)return;stopCoin();
+  document.getElementById('coinArena').classList.remove('show');document.getElementById('fdResult').classList.remove('show');
+  const wrap=document.getElementById('fdSlotWrap');const reel=document.getElementById('fdReel');
+  wrap.classList.add('show');
+  const winner=fdChips[Math.floor(Math.random()*fdChips.length)];
+  const ITEM_H=65;const wrapH=130;
+  const items=buildReelItems(fdChips,winner,20);
+  reel.innerHTML='';reel.style.transform='translateY(0)';reel.style.transition='none';
+  items.forEach(item=>{const d=document.createElement('div');d.className='fd-slot-item';d.textContent=item;reel.appendChild(d);});
+  const winnerIdx=items.length-2;const exactTargetY=winnerIdx*ITEM_H-(wrapH-ITEM_H)/2;
+  const dur=2600;const st=performance.now();
+  function eOE(t){return t===1?1:1-Math.pow(2,-10*t);}
+  function frame(now){
+    const t=Math.min((now-st)/dur,1);const e=eOE(t);
+    reel.style.transform=`translateY(-${e*exactTargetY}px)`;
+    const blur=Math.round((1-e)*10);reel.style.filter=blur>1?`blur(${blur}px)`:'none';
+    if(t<1){requestAnimationFrame(frame);}else{
+      reel.style.transform=`translateY(-${exactTargetY}px)`;reel.style.filter='none';
+      document.getElementById('fdRName').textContent=winner;
+      document.getElementById('fdRLbl').textContent='Fate has spoken ✨';
+      document.getElementById('fdResult').classList.add('show');launchConfettiSmall();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+function fdFlip(){
+  if(fdChips.length!==2)return;
+  if(coinFlipping){stopCoin();return;}
+  document.getElementById('fdSlotWrap').classList.remove('show');document.getElementById('fdResult').classList.remove('show');
+  document.getElementById('coinArena').classList.add('show');
+  document.getElementById('fdCoin').classList.add('active');document.getElementById('fdCoin').textContent='🛑 Stop!';
+  document.getElementById('coinLbl').textContent='Flipping… tap Stop to lock in!';
+  const coin=document.getElementById('theCoin');
+  document.getElementById('coinH').textContent=fdChips[0].slice(0,4);document.getElementById('coinT').textContent=fdChips[1].slice(0,4);
+  coinFlipping=true;let rot=0;coinInterval=setInterval(()=>{rot+=180;coin.style.transform=`rotateY(${rot}deg)`;},130);
+}
+function stopCoin(){
+  if(!coinFlipping)return;coinFlipping=false;clearInterval(coinInterval);
+  document.getElementById('fdCoin').classList.remove('active');document.getElementById('fdCoin').textContent='🪙 Coin Flip';
+  const coin=document.getElementById('theCoin');
+  const rot=parseFloat(coin.style.transform.replace('rotateY(',''))||0;
+  const norm=((rot%360)+360)%360;const isH=norm<90||norm>270;
+  const winner=isH?fdChips[0]:fdChips[1];
+  const endRot=rot+(isH?360:540);
+  coin.style.transition='transform 1.3s cubic-bezier(.16,1,.3,1)';coin.style.transform=`rotateY(${endRot}deg)`;
+  document.getElementById('coinLbl').textContent=`${winner} wins! 🏆`;
+  setTimeout(()=>{coin.style.transition='';document.getElementById('fdRName').textContent=winner;document.getElementById('fdRLbl').textContent='The coin has spoken! 🪙';document.getElementById('fdResult').classList.add('show');launchConfettiSmall();},1350);
+}
+
+/* ══ CONFETTI ══ */
+const cc=document.getElementById('cv');const cctx=cc.getContext('2d');
+let pieces=[],confRunning=false;
+function resizeCC(){cc.width=window.innerWidth;cc.height=window.innerHeight;}
+resizeCC();window.addEventListener('resize',resizeCC);
+const COLS=['#7C4DFF','#FFD600','#FF4D8D','#00C9A7','#FF6B6B','#4DA6FF','#B39DFF','#FFE766'];
+function spawnPieces(n,cx,cy){
+  for(let i=0;i<n;i++){pieces.push({x:cx??Math.random()*cc.width,y:cy??-10,w:5+Math.random()*8,h:7+Math.random()*11,color:COLS[Math.floor(Math.random()*COLS.length)],vx:(Math.random()-.5)*9,vy:cy?(-8-Math.random()*7):(3+Math.random()*5),rot:Math.random()*360,vrot:(Math.random()-.5)*14,life:1,decay:.008+Math.random()*.01,shape:Math.random()>.3?'rect':'circle'});}
+  if(!confRunning)animConf();
+}
+function launchConfetti(){spawnPieces(140);}
+function launchConfettiSmall(){const r=document.getElementById('fdModal').getBoundingClientRect();spawnPieces(60,r.left+r.width/2,r.top+r.height/3);}
+function animConf(){confRunning=true;cctx.clearRect(0,0,cc.width,cc.height);pieces=pieces.filter(p=>p.life>0);pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.18;p.rot+=p.vrot;p.life-=p.decay;cctx.save();cctx.globalAlpha=Math.max(0,p.life);cctx.translate(p.x,p.y);cctx.rotate(p.rot*Math.PI/180);cctx.fillStyle=p.color;if(p.shape==='circle'){cctx.beginPath();cctx.arc(0,0,p.w/2,0,Math.PI*2);cctx.fill();}else{cctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);}cctx.restore();});if(pieces.length)requestAnimationFrame(animConf);else{confRunning=false;cctx.clearRect(0,0,cc.width,cc.height);}}
+
+/* ══ INIT ══ */
+renderHistory();renderFavs();renderChips();
+</script>
+</body>
+</html>
